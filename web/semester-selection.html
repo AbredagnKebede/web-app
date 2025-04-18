@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Semester | Sekay</title>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo"><a href="home.html" style="text-decoration: none; transition: color 0.3s ease;">Sekay</a></div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="#" id="profileLink">Profile</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumb">
+            <a href="home.html">Home</a> &gt; <span>Select Semester</span>
+        </div>
+
+        <section class="semester-selection-section">
+            <h1>Select Semester</h1>
+            <p class="section-intro">Choose which semester materials you want to access</p>
+            
+            <div class="semester-cards">
+                <div class="semester-card" data-semester="1">
+                    <div class="semester-icon">1</div>
+                    <h2>First Semester</h2>
+                    <p>Access courses and materials for first semester</p>
+                </div>
+                <div class="semester-card" data-semester="2">
+                    <div class="semester-icon">2</div>
+                    <h2>Second Semester</h2>
+                    <p>Access courses and materials for second semester</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="ai-assistant-container">
+        <div class="ai-chat-window" id="aiChatWindow">
+            <div class="ai-chat-header">
+                <h3>AI Assistant</h3>
+                <button id="closeAiChat">×</button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message">
+                    <p>Hello! I'm your Sekay assistant. How can I help you today?</p>
+                </div>
+            </div>
+            <div class="ai-chat-input">
+                <textarea id="aiChatInput" placeholder="Type your question..."></textarea>
+                <button id="sendAiMessage" class="btn btn-primary btn-small">Send</button>
+            </div>
+        </div>
+        <button class="ai-assistant-button" id="aiAssistantButton">
+            <span>AI</span>
+        </button>
+    </div>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Sekay - Academic Resource Hub</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/courses.js"></script>
+    <script src="js/ai-assistant.js"></script>
+</body>
+</html>

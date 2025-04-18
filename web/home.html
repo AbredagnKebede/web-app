@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Sekay</title>
+    <link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
+    <header class="main-header">
+        <div class="logo">Sekay</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html" class="active">Home</a></li>
+                <li><a href="#" id="profileLink">Profile</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="dark-mode-toggle">
+        <button id="lightModeBtn" class="active">☀️</button>
+        <button id="darkModeBtn">🌙</button>
+    </div>
+
+    <main class="container">
+        <section class="welcome-section">
+            <h1>Welcome to Sekay, <span id="userName">Student</span>!</h1>
+            <div class="quote-box">
+                <p>"Education is the passport to the future, for tomorrow belongs to those who prepare for it today."</p>
+                <p class="quote-author">-- Malcolm X</p>
+            </div>
+            <p class="app-intro">
+                Access all your course materials in one place. Find references, lecture notes, 
+                and past exams for your courses based on your department and semester.
+            </p>
+            <a href="semester-selection.html" class="btn btn-primary btn-large">Get Course Materials</a>
+        </section>
+
+        <section class="features-section">
+            <div class="feature-card">
+                <div class="feature-icon">📘</div>
+                <h3>References</h3>
+                <p>Access recommended textbooks and reference materials for your courses.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Lecture Notes</h3>
+                <p>Download comprehensive lecture notes for better understanding.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧪</div>
+                <h3>Exams</h3>
+                <p>Practice with past tests, midterms, and final exams to excel in your courses.</p>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <h2>Contact Developers</h2>
+            <p>Have questions or suggestions? Reach out to our team.</p>
+            <form id="contactForm" class="contact-form">
+                <div class="form-group">
+                    <label for="contactName">Name</label>
+                    <input type="text" id="contactName" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email</label>
+                    <input type="email" id="contactEmail" placeholder="Your email">
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Message</label>
+                    <textarea id="contactMessage" placeholder="Your message" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-secondary">Send Message</button>
+            </form>
+        </section>
+
+        <section class="feedback-section">
+            <h2>Feedback</h2>
+            <p>Help us improve Sekay by sharing your experience.</p>
+            <form id="feedbackForm" class="feedback-form">
+                <div class="form-group">
+                    <label for="feedbackText">Your Feedback</label>
+                    <textarea id="feedbackText" placeholder="Share your thoughts..." rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-secondary">Submit Feedback</button>
+            </form>
+        </section>
+    </main>
+
+    <div class="ai-assistant-container">
+        <div class="ai-chat-window" id="aiChatWindow">
+            <div class="ai-chat-header">
+                <h3>AI Assistant</h3>
+                <button id="closeAiChat">×</button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message">
+                    <p>Hello! I'm your Sekay assistant. How can I help you today?</p>
+                </div>
+            </div>
+            <div class="ai-chat-input">
+                <textarea id="aiChatInput" placeholder="Type your question..."></textarea>
+                <button id="sendAiMessage" class="btn btn-primary btn-small">Send</button>
+            </div>
+        </div>
+        <button class="ai-assistant-button" id="aiAssistantButton">
+            <span>AI</span>
+        </button>
+    </div>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Sekay - Academic Resource Hub</p>
+    </footer>
+    <script src="../js/ai-assistant.js"></script>
+</body>
+</html>
