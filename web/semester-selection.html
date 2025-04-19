@@ -4,17 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Semester | Sekay</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header class="main-header">
-        <div class="logo"><a href="home.html" style="text-decoration: none; transition: color 0.3s ease;">Sekay</a></div>
+        <div class="logo"><a href="home.html">Sekay</a></div>
         <nav>
             <ul class="nav-links">
-                <li><a href="home.html">Home</a></li>
-                <li><a href="#" id="profileLink">Profile</a></li>
-                <li><a href="#" id="logoutBtn">Logout</a></li>
+                <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" id="profileLink"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </nav>
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
     </header>
 
     <main class="container">
@@ -31,11 +36,17 @@
                     <div class="semester-icon">1</div>
                     <h2>First Semester</h2>
                     <p>Access courses and materials for first semester</p>
+                    <div class="card-overlay">
+                        <a href="#" class="btn-view">View Courses</a>
+                    </div>
                 </div>
                 <div class="semester-card" data-semester="2">
                     <div class="semester-icon">2</div>
                     <h2>Second Semester</h2>
                     <p>Access courses and materials for second semester</p>
+                    <div class="card-overlay">
+                        <a href="#" class="btn-view">View Courses</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -44,7 +55,7 @@
     <div class="ai-assistant-container">
         <div class="ai-chat-window" id="aiChatWindow">
             <div class="ai-chat-header">
-                <h3>AI Assistant</h3>
+                <h3><i class="fas fa-robot"></i> AI Assistant</h3>
                 <button id="closeAiChat">×</button>
             </div>
             <div class="ai-chat-messages" id="aiChatMessages">
@@ -54,20 +65,30 @@
             </div>
             <div class="ai-chat-input">
                 <textarea id="aiChatInput" placeholder="Type your question..."></textarea>
-                <button id="sendAiMessage" class="btn btn-primary btn-small">Send</button>
+                <button id="sendAiMessage" class="btn btn-primary btn-small">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
         <button class="ai-assistant-button" id="aiAssistantButton">
-            <span>AI</span>
+            <i class="fas fa-robot"></i>
         </button>
     </div>
 
     <footer class="main-footer">
-        <p>&copy; 2025 Sekay - Academic Resource Hub</p>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <p>&copy; 2025 Sekay - Academic Resource Hub</p>
+        </div>
     </footer>
 
     <script src="js/app.js"></script>
     <script src="js/courses.js"></script>
-    <script src="js/ai-assistant.js"></script>
+    <script src="../js/ai-assistant.js"></script>
 </body>
 </html>
