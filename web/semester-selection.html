@@ -112,10 +112,8 @@
     <footer class="main-footer">
         <p>&copy; 2025 Sekay - Academic Resource Hub</p>
     </footer>
-
-    <script src="js/app.js"></script>
-    <script src="js/courses.js"></script>
-    <script src="js/ai-assistant.js"></script>
+    
+    <script src="../js/ai-assistant.js"></script>
     <script>
         // Basic functionality for the new features
         document.addEventListener('DOMContentLoaded', function() {
@@ -153,62 +151,6 @@
                     const semesterId = this.closest('.semester-card').getAttribute('data-semester');
                     window.location.href = `courses.html?semester=${semesterId}`;
                 });
-            });
-            
-            // AI Assistant functionality
-            const aiButton = document.getElementById('aiAssistantButton');
-            const aiWindow = document.getElementById('aiChatWindow');
-            const closeAiBtn = document.getElementById('closeAiChat');
-            const sendAiBtn = document.getElementById('sendAiMessage');
-            const aiInput = document.getElementById('aiChatInput');
-            const aiMessages = document.getElementById('aiChatMessages');
-            
-            aiButton.addEventListener('click', function() {
-                aiWindow.classList.toggle('active');
-            });
-            
-            closeAiBtn.addEventListener('click', function() {
-                aiWindow.classList.remove('active');
-            });
-            
-            sendAiBtn.addEventListener('click', function() {
-                const message = aiInput.value.trim();
-                
-                if (message) {
-                    // Add user message
-                    const userMessageDiv = document.createElement('div');
-                    userMessageDiv.className = 'user-message';
-                    userMessageDiv.innerHTML = `<p>${message}</p>`;
-                    aiMessages.appendChild(userMessageDiv);
-                    
-                    // Clear input
-                    aiInput.value = '';
-                    
-                    // Mock AI response
-                    setTimeout(() => {
-                        const aiMessageDiv = document.createElement('div');
-                        aiMessageDiv.className = 'ai-message';
-                        
-                        // Customized response for semester page
-                        if (message.toLowerCase().includes('semester')) {
-                            aiMessageDiv.innerHTML = `<p>You can select either the First or Second semester by clicking on a card above. Each semester contains different courses and materials relevant to that part of the academic year.</p>`;
-                        } else {
-                            aiMessageDiv.innerHTML = `<p>I'm here to help you navigate the Sekay platform. You can ask me about courses, materials, or how to use different features.</p>`;
-                        }
-                        
-                        aiMessages.appendChild(aiMessageDiv);
-                        aiMessages.scrollTop = aiMessages.scrollHeight;
-                    }, 1000);
-                    
-                    aiMessages.scrollTop = aiMessages.scrollHeight;
-                }
-            });
-            
-            aiInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendAiBtn.click();
-                }
             });
         });
     </script>
