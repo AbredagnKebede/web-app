@@ -4,23 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Semester | Sekay</title>
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/semester.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
     <header class="main-header">
         <div class="logo"><a href="home.html">Sekay</a></div>
         <nav>
             <ul class="nav-links">
-                <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="home.html" class="active"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="#" id="profileLink"><i class="fas fa-user"></i> Profile</a></li>
                 <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </nav>
-        <div class="menu-toggle">
-            <i class="fas fa-bars"></i>
-        </div>
     </header>
+
+    <div class="dark-mode-toggle">
+        <button id="lightModeBtn" class="active">☀️</button>
+        <button id="darkModeBtn">🌙</button>
+    </div>
 
     <main class="container">
         <div class="breadcrumb">
@@ -36,16 +41,47 @@
                     <div class="semester-icon">1</div>
                     <h2>First Semester</h2>
                     <p>Access courses and materials for first semester</p>
-                    <div class="card-overlay">
-                        <a href="#" class="btn-view">View Courses</a>
+                    <div class="semester-stats">
+                        <span><i class="stat-icon courses-icon"></i> 8 Courses</span>
+                        <span><i class="stat-icon materials-icon"></i> 45 Materials</span>
                     </div>
+                    <button class="select-btn">Select</button>
                 </div>
                 <div class="semester-card" data-semester="2">
                     <div class="semester-icon">2</div>
                     <h2>Second Semester</h2>
                     <p>Access courses and materials for second semester</p>
-                    <div class="card-overlay">
-                        <a href="#" class="btn-view">View Courses</a>
+                    <div class="semester-stats">
+                        <span><i class="stat-icon courses-icon"></i> 7 Courses</span>
+                        <span><i class="stat-icon materials-icon"></i> 38 Materials</span>
+                    </div>
+                    <button class="select-btn">Select</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="recent-activity">
+            <h2>Recent Activity</h2>
+            <div class="activity-timeline">
+                <div class="activity-item">
+                    <div class="activity-icon document-icon"></div>
+                    <div class="activity-content">
+                        <h3>Calculus II - Lecture Notes</h3>
+                        <p>You accessed this material yesterday</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon exam-icon"></div>
+                    <div class="activity-content">
+                        <h3>Physics I - Past Exam 2023</h3>
+                        <p>You accessed this material 3 days ago</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon book-icon"></div>
+                    <div class="activity-content">
+                        <h3>Introduction to Programming - Textbook</h3>
+                        <p>You accessed this material 5 days ago</p>
                     </div>
                 </div>
             </div>
@@ -55,7 +91,7 @@
     <div class="ai-assistant-container">
         <div class="ai-chat-window" id="aiChatWindow">
             <div class="ai-chat-header">
-                <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+                <h3>AI Assistant</h3>
                 <button id="closeAiChat">×</button>
             </div>
             <div class="ai-chat-messages" id="aiChatMessages">
@@ -65,30 +101,116 @@
             </div>
             <div class="ai-chat-input">
                 <textarea id="aiChatInput" placeholder="Type your question..."></textarea>
-                <button id="sendAiMessage" class="btn btn-primary btn-small">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+                <button id="sendAiMessage" class="btn btn-primary btn-small">Send</button>
             </div>
         </div>
         <button class="ai-assistant-button" id="aiAssistantButton">
-            <i class="fas fa-robot"></i>
+            <span>AI</span>
         </button>
     </div>
 
     <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#">About Us</a>
-                <a href="#">Contact</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-            </div>
-            <p>&copy; 2025 Sekay - Academic Resource Hub</p>
-        </div>
+        <p>&copy; 2025 Sekay - Academic Resource Hub</p>
     </footer>
 
     <script src="js/app.js"></script>
     <script src="js/courses.js"></script>
-    <script src="../js/ai-assistant.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    <script>
+        // Basic functionality for the new features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark mode toggle
+            document.getElementById('darkModeBtn').addEventListener('click', function() {
+                document.body.classList.add('dark-mode');
+                this.classList.add('active');
+                document.getElementById('lightModeBtn').classList.remove('active');
+                localStorage.setItem('darkMode', 'enabled');
+            });
+            
+            document.getElementById('lightModeBtn').addEventListener('click', function() {
+                document.body.classList.remove('dark-mode');
+                this.classList.add('active');
+                document.getElementById('darkModeBtn').classList.remove('active');
+                localStorage.setItem('darkMode', 'disabled');
+            });
+            
+            // Check saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.getElementById('darkModeBtn').click();
+            }
+            
+            // Scroll indicator
+            window.addEventListener('scroll', function() {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('scrollIndicator').style.width = scrolled + '%';
+            });
+            
+            // Handle semester selection
+            document.querySelectorAll('.select-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const semesterId = this.closest('.semester-card').getAttribute('data-semester');
+                    window.location.href = `courses.html?semester=${semesterId}`;
+                });
+            });
+            
+            // AI Assistant functionality
+            const aiButton = document.getElementById('aiAssistantButton');
+            const aiWindow = document.getElementById('aiChatWindow');
+            const closeAiBtn = document.getElementById('closeAiChat');
+            const sendAiBtn = document.getElementById('sendAiMessage');
+            const aiInput = document.getElementById('aiChatInput');
+            const aiMessages = document.getElementById('aiChatMessages');
+            
+            aiButton.addEventListener('click', function() {
+                aiWindow.classList.toggle('active');
+            });
+            
+            closeAiBtn.addEventListener('click', function() {
+                aiWindow.classList.remove('active');
+            });
+            
+            sendAiBtn.addEventListener('click', function() {
+                const message = aiInput.value.trim();
+                
+                if (message) {
+                    // Add user message
+                    const userMessageDiv = document.createElement('div');
+                    userMessageDiv.className = 'user-message';
+                    userMessageDiv.innerHTML = `<p>${message}</p>`;
+                    aiMessages.appendChild(userMessageDiv);
+                    
+                    // Clear input
+                    aiInput.value = '';
+                    
+                    // Mock AI response
+                    setTimeout(() => {
+                        const aiMessageDiv = document.createElement('div');
+                        aiMessageDiv.className = 'ai-message';
+                        
+                        // Customized response for semester page
+                        if (message.toLowerCase().includes('semester')) {
+                            aiMessageDiv.innerHTML = `<p>You can select either the First or Second semester by clicking on a card above. Each semester contains different courses and materials relevant to that part of the academic year.</p>`;
+                        } else {
+                            aiMessageDiv.innerHTML = `<p>I'm here to help you navigate the Sekay platform. You can ask me about courses, materials, or how to use different features.</p>`;
+                        }
+                        
+                        aiMessages.appendChild(aiMessageDiv);
+                        aiMessages.scrollTop = aiMessages.scrollHeight;
+                    }, 1000);
+                    
+                    aiMessages.scrollTop = aiMessages.scrollHeight;
+                }
+            });
+            
+            aiInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendAiBtn.click();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
