@@ -45,7 +45,7 @@
                         <span><i class="stat-icon courses-icon"></i> 8 Courses</span>
                         <span><i class="stat-icon materials-icon"></i> 45 Materials</span>
                     </div>
-                    <button class="select-btn">Select</button>
+                    <button class="select-btn" onclick="window.location.href='courses.html?semester=1'">Select</button>
                 </div>
                 <div class="semester-card" data-semester="2">
                     <div class="semester-icon">2</div>
@@ -114,45 +114,6 @@
     </footer>
     
     <script src="../js/ai-assistant.js"></script>
-    <script>
-        // Basic functionality for the new features
-        document.addEventListener('DOMContentLoaded', function() {
-            // Dark mode toggle
-            document.getElementById('darkModeBtn').addEventListener('click', function() {
-                document.body.classList.add('dark-mode');
-                this.classList.add('active');
-                document.getElementById('lightModeBtn').classList.remove('active');
-                localStorage.setItem('darkMode', 'enabled');
-            });
-            
-            document.getElementById('lightModeBtn').addEventListener('click', function() {
-                document.body.classList.remove('dark-mode');
-                this.classList.add('active');
-                document.getElementById('darkModeBtn').classList.remove('active');
-                localStorage.setItem('darkMode', 'disabled');
-            });
-            
-            // Check saved dark mode preference
-            if (localStorage.getItem('darkMode') === 'enabled') {
-                document.getElementById('darkModeBtn').click();
-            }
-            
-            // Scroll indicator
-            window.addEventListener('scroll', function() {
-                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrolled = (winScroll / height) * 100;
-                document.getElementById('scrollIndicator').style.width = scrolled + '%';
-            });
-            
-            // Handle semester selection
-            document.querySelectorAll('.select-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const semesterId = this.closest('.semester-card').getAttribute('data-semester');
-                    window.location.href = `courses.html?semester=${semesterId}`;
-                });
-            });
-        });
-    </script>
+    <script src="../js/auth.js"></script>
 </body>
 </html>
