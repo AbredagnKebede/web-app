@@ -51,6 +51,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($department)) {
         $response['errors']['department'] = "Department is required";
     }
+    // Lookup department ID from department name
+    $dept_stmt = $conn->prepare("SELECT id FROM departments WHERE name = ?");
+    $dept_stmt->bind_param("s", $department);
+    $dept_stmt->execute();
+    $dept_result = $dept_stmt->get_result();
+
+    if ($dept_result->num_rows > 0) {
+        $dept_row = $dept_result->fetch_assoc();
+        $department_id = $dept_row['id'];
+    } else {
+        $response['errors']['department'] = "Selected department does not exist";
+    }
+
+    $dept_stmt->close();
+
     
     // Validate password
     if (empty($password)) {
@@ -70,8 +85,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($response['errors'])) {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         
-        $stmt = $conn->prepare("INSERT INTO users (name, email, academic_year, department, password) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $name, $email, $academicYear, $department, $hashed_password);
+        // Corrected column name: department_id
+        $stmt = $conn->prepare("INSERT INTO users (name, email, academic_year, department_id, password_hash) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssis", $name, $email, $academicYear, $department_id, $hashed_password);
         
         if ($stmt->execute()) {
             $response['success'] = true;
