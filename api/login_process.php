@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // If no validation errors, check login credentials
     if (empty($response['errors'])) {
-        $stmt = $conn->prepare("SELECT id, name, password FROM users WHERE email = ?");
+        $stmt = $conn->prepare("SELECT id, name, password_hash FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
             
-            if (password_verify($password, $user['password'])) {
+            if (password_verify($password, $user['password_hash'])) {
                 // Login successful
                 $_SESSION['loggedin'] = true;
                 $_SESSION['user_id'] = $user['id'];
