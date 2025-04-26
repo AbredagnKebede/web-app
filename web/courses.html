@@ -2,58 +2,238 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your Courses</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; }
-        h1 { color: #333; }
-        .course-list { margin-top: 20px; }
-        .course-card {
-            background-color: #fff;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses | Sekay</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/courses.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <h1>Your Courses</h1>
-    <div id="courses" class="course-list"></div>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
+    <header class="main-header">
+        <div class="logo"><a href="home.html">Sekay</a></div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" id="profileLink"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </header>
 
+    <div class="dark-mode-toggle">
+        <button id="lightModeBtn" class="active">☀️</button>
+        <button id="darkModeBtn">🌙</button>
+    </div>
+
+    <main class="container">
+        <div class="breadcrumb">
+            <a href="home.html">Home</a> &gt; 
+            <a href="semester-selection.html">Select Semester</a> &gt; 
+            <span id="currentSemesterText">Courses</span>
+        </div>
+
+        <section class="user-info-section">
+            <div class="user-academic-info">
+                <div class="academic-info-item">
+                    <span class="info-label">Academic Year:</span>
+                    <span class="info-value" id="academicYear">2nd Year</span>
+                </div>
+                <div class="academic-info-item">
+                    <span class="info-label">Department:</span>
+                    <span class="info-value" id="department">Computer Science</span>
+                </div>
+                <div class="academic-info-item">
+                    <span class="info-label">Semester:</span>
+                    <span class="info-value" id="currentSemester">Second Semester</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="courses-section">
+            <div class="section-header">
+                <h1>Your Courses</h1>
+                <div class="courses-filter">
+                    <label for="filterCourses">Filter:</label>
+                    <select id="filterCourses">
+                        <option value="all">All Courses</option>
+                        <option value="core">Core Courses</option>
+                        <option value="elective">Elective Courses</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="search-wrapper">
+                <input type="text" id="searchCourses" placeholder="Search courses...">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <div class="courses-grid" id="coursesGrid">
+                <!-- Course cards will be dynamically generated here -->
+            </div>
+
+            <div class="no-courses-message" id="noCoursesMessage" style="display: none;">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23adb5bd' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6L6 18M6 6l12 12'/%3E%3C/svg%3E" alt="No courses found">
+                <p>No courses found matching your criteria</p>
+                <button class="btn btn-primary" id="resetFiltersBtn">Reset Filters</button>
+            </div>
+        </section>
+
+        <section class="progress-section">
+            <h2>Semester Progress</h2>
+            <div class="progress-cards">
+                <div class="progress-card">
+                    <div class="progress-info">
+                        <h3>Completed Materials</h3>
+                        <p class="progress-percentage">68%</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-filled" style="width: 68%"></div>
+                    </div>
+                    <p class="progress-detail">You've completed 34 out of 50 materials</p>
+                </div>
+                <div class="progress-card">
+                    <div class="progress-info">
+                        <h3>Exam Preparation</h3>
+                        <p class="progress-percentage">45%</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-filled" style="width: 45%"></div>
+                    </div>
+                    <p class="progress-detail">You've studied 9 out of 20 past exams</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="related-resources">
+            <h2>Study Resources</h2>
+            <div class="resources-cards">
+                <div class="resource-card">
+                    <div class="resource-icon library-icon"></div>
+                    <div class="resource-content">
+                        <h3>E-Library Access</h3>
+                        <p>Access the university's digital library for additional references</p>
+                        <a href="#" class="resource-link">Browse Library</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon tutorial-icon"></div>
+                    <div class="resource-content">
+                        <h3>Video Tutorials</h3>
+                        <p>Watch curated tutorial videos for your courses</p>
+                        <a href="#" class="resource-link">Watch Tutorials</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon forum-icon"></div>
+                    <div class="resource-content">
+                        <h3>Discussion Forums</h3>
+                        <p>Join discussions with other students in your courses</p>
+                        <a href="#" class="resource-link">Join Forums</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="ai-assistant-container">
+        <div class="ai-chat-window" id="aiChatWindow">
+            <div class="ai-chat-header">
+                <h3>AI Assistant</h3>
+                <button id="closeAiChat">×</button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message">
+                    <p>Hello! I'm your Sekay assistant. Need help finding course materials?</p>
+                </div>
+            </div>
+            <div class="ai-chat-input">
+                <textarea id="aiChatInput" placeholder="Type your question..."></textarea>
+                <button id="sendAiMessage" class="btn btn-primary btn-small">Send</button>
+            </div>
+        </div>
+        <button class="ai-assistant-button" id="aiAssistantButton">
+            <span>AI</span>
+        </button>
+    </div>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Sekay - Academic Resource Hub</p>
+    </footer>
+
+    <!-- Modal Template for Course Materials -->
+    <div class="course-modal" id="courseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalCourseName">Course Name</h2>
+                <button class="close-modal" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="course-details">
+                    <div class="course-detail-item">
+                        <span class="detail-label">Course Code:</span>
+                        <span id="modalCourseCode" class="detail-value">CS101</span>
+                    </div>
+                    <div class="course-detail-item">
+                        <span class="detail-label">Credit Hours:</span>
+                        <span id="modalCreditHours" class="detail-value">3</span>
+                    </div>
+                    <div class="course-detail-item">
+                        <span class="detail-label">Instructor:</span>
+                        <span id="modalInstructor" class="detail-value">Dr. Smith</span>
+                    </div>
+                </div>
+                
+                <div class="materials-section">
+                    <h3>Course Materials</h3>
+                    <div class="materials-tabs">
+                        <button class="material-tab active" data-tab="references">References</button>
+                        <button class="material-tab" data-tab="lectures">Lecture Notes</button>
+                        <button class="material-tab" data-tab="exams">Past Exams</button>
+                    </div>
+                    
+                    <div class="materials-content">
+                        <div class="material-content-pane active" id="referencesPane">
+                            <div class="material-list" id="referencesList">
+                                <!-- References will be dynamically generated here -->
+                            </div>
+                        </div>
+                        <div class="material-content-pane" id="lecturesPane">
+                            <div class="material-list" id="lecturesList">
+                                <!-- Lecture notes will be dynamically generated here -->
+                            </div>
+                        </div>
+                        <div class="material-content-pane" id="examsPane">
+                            <div class="material-list" id="examsList">
+                                <!-- Exams will be dynamically generated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("../api/courses.php") // Corrected path
+        // Add this debug function to help troubleshoot
+        function checkLoginStatus() {
+            fetch('../api/check_login.php')
                 .then(response => response.json())
                 .then(data => {
-                    const courseContainer = document.getElementById("courses");
-
-                    if (data.error) {
-                        courseContainer.innerHTML = `<p>${data.error}</p>`;
-                        return;
-                    }
-
-                    const courses = data.courses;
-
-                    if (courses.length === 0) {
-                        courseContainer.innerHTML = "<p>No courses found for your academic year and department.</p>";
-                    } else {
-                        courses.forEach(course => {
-                            const div = document.createElement("div");
-                            div.className = "course-card";
-                            div.innerHTML = `
-                                <h2>${course.title} (${course.code})</h2>
-                                <p>Semester: ${course.semester} | Academic Year: ${course.academic_year}</p>
-                                <a href="materials.html?course_code=${encodeURIComponent(course.code)}">View Materials</a>
-                            `;
-                            courseContainer.appendChild(div);
-                        });
-                    }
+                    console.log('Login status:', data);
                 })
-                .catch(err => {
-                    document.getElementById("courses").innerHTML = "<p>Error loading courses.</p>";
-                    console.error(err);
+                .catch(error => {
+                    console.error('Error checking login status:', error);
                 });
+        }
+        
+        // Call this function when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
         });
     </script>
+
+    <script src="../js/ai-assistant.js"></script>
+    <script src="../js/courses.js"></script>
 </body>
 </html>
