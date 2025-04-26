@@ -214,26 +214,101 @@
             </div>
         </div>
     </div>
-    <script>
-        // Add this debug function to help troubleshoot
-        function checkLoginStatus() {
-            fetch('../api/check_login.php')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Login status:', data);
-                })
-                .catch(error => {
-                    console.error('Error checking login status:', error);
-                });
-        }
-        
-        // Call this function when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            checkLoginStatus();
-        });
-    </script>
 
     <script src="../js/ai-assistant.js"></script>
-    <script src="../js/courses.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get semester from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const semesterId = urlParams.get('semester');
+            
+            // Update semester display
+            const currentSemesterText = document.getElementById('currentSemesterText');
+            const currentSemester = document.getElementById('currentSemester');
+            if (semesterId === '1') {
+                currentSemesterText.textContent = 'First Semester Courses';
+                currentSemester.textContent = 'First Semester';
+            } else if (semesterId === '2') {
+                currentSemesterText.textContent = 'Second Semester Courses';
+                currentSemester.textContent = 'Second Semester';
+            }
+            
+            // Fetch user info
+            fetch('../php/get_user_info.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('academicYear').textContent = data.academic_year;
+                        document.getElementById('department').textContent = data.department;
+                    }
+                })
+                .catch(error => console.error('Error fetching user info:', error));
+            
+            // Fetch courses for the selected semester
+            const coursesGrid = document.querySelector('.courses-grid');
+            
+            fetch(`../php/get_courses.php?semester=${semesterId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.courses.length > 0) {
+                        // Clear "no courses" message if it exists
+                        coursesGrid.innerHTML = '';
+                        
+                        // Display courses
+                        data.courses.forEach(course => {
+                            const courseCard = document.createElement('div');
+                            courseCard.className = 'course-card';
+                            courseCard.innerHTML = `
+                                <div class="course-icon">${course.course_code.charAt(0)}</div>
+                                <h3 class="course-name">${course.course_name}</h3>
+                                <p class="course-description">${course.course_code} - ${course.academic_year}</p>
+                                <div class="course-stats">
+                                    <span class="stat-item"><i class="material-icon reference-icon"></i> References</span>
+                                    <span class="stat-item"><i class="material-icon lecture-icon"></i> Lectures</span>
+                                </div>
+                            `;
+                            coursesGrid.appendChild(courseCard);
+                            
+                            // Add click event to open modal
+                            courseCard.addEventListener('click', function() {
+                                openCourseModal(course);
+                            });
+                        });
+                    } else {
+                        coursesGrid.innerHTML = '<div class="no-courses-message">No courses found matching your criteria</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                    coursesGrid.innerHTML = '<div class="no-courses-message">Error loading courses. Please try again.</div>';
+                });
+                
+            // Function to open course modal
+            function openCourseModal(course) {
+                document.getElementById('modalCourseName').textContent = course.course_name;
+                document.getElementById('modalCourseCode').textContent = course.course_code;
+                document.getElementById('modalCreditHours').textContent = course.credit_hours;
+                document.getElementById('modalInstructor').textContent = 'Instructor'; // Add instructor if available
+                
+                // Show modal
+                document.getElementById('courseModal').style.display = 'flex';
+            }
+            
+            // Close modal when clicking the close button
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('courseModal').style.display = 'none';
+            });
+            
+            // Filter courses functionality
+            document.getElementById('filterCourses').addEventListener('change', function() {
+                // Add filtering logic here
+            });
+            
+            // Search courses functionality
+            document.getElementById('searchCourses').addEventListener('input', function() {
+                // Add search logic here
+            });
+        });
+    </script>
 </body>
 </html>
