@@ -8,8 +8,59 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('currentSemesterText').textContent = semester === '1' ? 'First Semester Courses' : 'Second Semester Courses';
     }
     
-    // Fetch user courses
-    fetchUserCourses();
+    // Update semester display
+    const currentSemesterText = document.getElementById('currentSemesterText');
+    const currentSemester = document.getElementById('currentSemester');
+    if (semester === '1') {
+        currentSemesterText.textContent = 'First Semester Courses';
+        currentSemester.textContent = 'First Semester';
+    } else if (semester === '2') {
+        currentSemesterText.textContent = 'Second Semester Courses';
+        currentSemester.textContent = 'Second Semester';
+    }
+    
+    // Fetch user info
+    fetch('../php/get_user_info.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('academicYear').textContent = data.academic_year;
+                document.getElementById('department').textContent = data.department;
+            }
+        })
+        .catch(error => console.error('Error fetching user info:', error));
+    
+    // Fetch courses for the selected semester
+    const coursesGrid = document.querySelector('.courses-grid');
+    
+    fetch(`../php/get_courses.php?semester=${semester}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.courses.length > 0) {
+                displayCourses(data.courses);
+            } else {
+                document.getElementById('noCoursesMessage').style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('noCoursesMessage').style.display = 'block';
+        });
+    
+    // Close modal when clicking the close button
+    document.getElementById('closeModal').addEventListener('click', function() {
+        document.getElementById('courseModal').style.display = 'none';
+    });
+    
+    // Filter courses functionality
+    document.getElementById('filterCourses').addEventListener('change', function() {
+        // Add filtering logic here
+    });
+    
+    // Search courses functionality
+    document.getElementById('searchCourses').addEventListener('input', function() {
+        // Add search logic here
+    });
 });
 
 function fetchUserCourses() {
@@ -63,24 +114,20 @@ function displayCourses(courses) {
 }
 
 function openCourseModal(course) {
-    document.getElementById("modalCourseName").textContent = course.name;
+    document.getElementById("modalCourseName").textContent = course.name || course.title;
     document.getElementById("modalCourseCode").textContent = course.code;
-    document.getElementById("modalCreditHours").textContent = course.credit_hours;
-    document.getElementById("modalInstructor").textContent = course.instructor;
+    document.getElementById("modalCreditHours").textContent = course.credit_hours || 'N/A';
 
     document.getElementById("referencesList").innerHTML = `
-        <a href="${course.reference_link}" target="_blank">Reference Materials</a>
+        <a href="${course.reference_link || '#'}" target="_blank">Reference Materials</a>
     `;
     document.getElementById("lecturesList").innerHTML = `
-        <a href="${course.lecture_note_link}" target="_blank">Lecture Notes</a>
+        <a href="${course.lecture_note_link || '#'}" target="_blank">Lecture Notes</a>
     `;
     document.getElementById("examsList").innerHTML = `
-        <a href="${course.exam_link}" target="_blank">Past Exams</a>
+        <a href="${course.exam_link || '#'}" target="_blank">Past Exams</a>
     `;
-
-    document.getElementById("courseModal").style.display = "block";
+    
+    // Show modal
+    document.getElementById('courseModal').style.display = 'flex';
 }
-
-document.getElementById("closeModal").addEventListener("click", () => {
-    document.getElementById("courseModal").style.display = "none";
-});
