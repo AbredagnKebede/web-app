@@ -82,30 +82,3 @@ INSERT INTO DEPARTMENTS (name, code) VALUES
 ('Chemical Engineering', 'CHEE'),
 ('Materials Science and Engineering', 'MSE'),
 ('Mechanical Engineering', 'ME');
-ALTER TABLE USERS
-MODIFY academic_year VARCHAR(20);
-ALTER TABLE DEPARTMENTS DROP COLUMN code;
-ALTER TABLE courses
-ADD COLUMN reference_link TEXT,
-ADD COLUMN lecture_note_link TEXT,
-ADD COLUMN exam_link TEXT;
-INSERT INTO courses (
-    title, code, department_id, semester, academic_year, 
-    reference_link, lecture_note_link, exam_link
-) 
-VALUES 
-('Object-Oriented Programming', 'SE201', 10, 2, 'Junior', 
- 'https://example.com/references/oop', 
- 'https://example.com/lectures/oop', 
- 'https://example.com/exams/oop'),
-
-('Software Engineering Principles', 'SE202', 10, 2, 'Junior', 
- 'https://example.com/references/se-principles', 
- 'https://example.com/lectures/se-principles', 
- 'https://example.com/exams/se-principles'),
-
-('UI/UX Design', 'SE203', 10, 2, 'Junior', 
- 'https://example.com/references/uiux', 
- 'https://example.com/lectures/uiux', 
- 'https://example.com/exams/uiux');
- 
