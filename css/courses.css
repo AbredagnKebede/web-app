@@ -139,6 +139,7 @@
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     overflow: hidden;
+    height: 100%;
     transition: var(--transition);
     display: flex;
     flex-direction: column;
