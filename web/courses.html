@@ -38,15 +38,15 @@
             <div class="user-academic-info">
                 <div class="academic-info-item">
                     <span class="info-label">Academic Year:</span>
-                    <span class="info-value" id="academicYear">2nd Year</span>
+                    <span class="info-value" id="academicYear"></span>
                 </div>
                 <div class="academic-info-item">
                     <span class="info-label">Department:</span>
-                    <span class="info-value" id="department">Computer Science</span>
+                    <span class="info-value" id="department"></span>
                 </div>
                 <div class="academic-info-item">
                     <span class="info-label">Semester:</span>
-                    <span class="info-value" id="currentSemester">Second Semester</span>
+                    <span class="info-value" id="currentSemester"></span>
                 </div>
             </div>
         </section>
@@ -161,60 +161,6 @@
     <footer class="main-footer">
         <p>&copy; 2025 Sekay - Academic Resource Hub</p>
     </footer>
-
-    <!-- Modal Template for Course Materials -->
-    <div class="course-modal" id="courseModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalCourseName">Course Name</h2>
-                <button class="close-modal" id="closeModal">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="course-details">
-                    <div class="course-detail-item">
-                        <span class="detail-label">Course Code:</span>
-                        <span id="modalCourseCode" class="detail-value">CS101</span>
-                    </div>
-                    <div class="course-detail-item">
-                        <span class="detail-label">Credit Hours:</span>
-                        <span id="modalCreditHours" class="detail-value">3</span>
-                    </div>
-                    <div class="course-detail-item">
-                        <span class="detail-label">Instructor:</span>
-                        <span id="modalInstructor" class="detail-value">Dr. Smith</span>
-                    </div>
-                </div>
-                
-                <div class="materials-section">
-                    <h3>Course Materials</h3>
-                    <div class="materials-tabs">
-                        <button class="material-tab active" data-tab="references">References</button>
-                        <button class="material-tab" data-tab="lectures">Lecture Notes</button>
-                        <button class="material-tab" data-tab="exams">Past Exams</button>
-                    </div>
-                    
-                    <div class="materials-content">
-                        <div class="material-content-pane active" id="referencesPane">
-                            <div class="material-list" id="referencesList">
-                                <!-- References will be dynamically generated here -->
-                            </div>
-                        </div>
-                        <div class="material-content-pane" id="lecturesPane">
-                            <div class="material-list" id="lecturesList">
-                                <!-- Lecture notes will be dynamically generated here -->
-                            </div>
-                        </div>
-                        <div class="material-content-pane" id="examsPane">
-                            <div class="material-list" id="examsList">
-                                <!-- Exams will be dynamically generated here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script src="../js/ai-assistant.js"></script>
     <script src="../js/courses.js"></script>
 </body>
