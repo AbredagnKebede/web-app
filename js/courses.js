@@ -101,13 +101,27 @@ function displayCourses(courses) {
     courses.forEach(course => {
         const card = document.createElement("div");
         card.className = "course-card";
+        card.style.backgroundColor = "#fff";
+        card.style.borderRadius = "8px";
+        card.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+        card.style.overflow = "hidden";
+        card.style.display = "flex";
+        card.style.flexDirection = "column";
+        card.style.height = "100%";
+        
         card.innerHTML = `
-            <h3>${course.name || course.title}</h3>
-            <p><strong>Code:</strong> ${course.code}</p>
-            <p><strong>Credit Hours:</strong> ${course.credit_hours || 'N/A'}</p>
-            <p><strong>Instructor:</strong> ${course.instructor || 'N/A'}</p>
-            <p><strong>Type:</strong> ${course.type || 'Regular'}</p>
-            <button class="btn btn-primary" onclick='openCourseModal(${JSON.stringify(course)})'>View Materials</button>
+            <div class="course-header" style="background-color: #4a5568; color: white; padding: 15px;">
+                <h3 style="margin: 0; font-size: 1.2rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${course.name || course.title}</h3>
+            </div>
+            <div class="course-content" style="padding: 15px; flex-grow: 1;">
+                <p style="margin: 8px 0; font-size: 0.9rem; line-height: 1.4;"><strong>Code:</strong> ${course.code}</p>
+                <p style="margin: 8px 0; font-size: 0.9rem; line-height: 1.4;"><strong>Credit Hours:</strong> ${course.credit_hours || 'N/A'}</p>
+                <p style="margin: 8px 0; font-size: 0.9rem; line-height: 1.4;"><strong>Instructor:</strong> ${course.instructor || 'N/A'}</p>
+                <p style="margin: 8px 0; font-size: 0.9rem; line-height: 1.4;"><strong>Type:</strong> ${course.type || 'Regular'}</p>
+            </div>
+            <div class="course-footer" style="padding: 15px; border-top: 1px solid #edf2f7; text-align: center;">
+                <button class="view-materials-btn" style="width: 100%; padding: 8px 16px; background-color: #4361ee; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; transition: background-color 0.2s ease;">View Materials</button>
+            </div>
         `;
         grid.appendChild(card);
     });
