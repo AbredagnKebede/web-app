@@ -1,17 +1,6 @@
 <?php
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "bare@coat";
-$dbname = "sekay";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die(json_encode(['success' => false, 'message' => 'Connection failed: ' . $conn->connect_error]));
-}
+// Include database connection
+require_once '../api/connect.php';  
 
 // Get user ID from session
 session_start();
@@ -22,8 +11,11 @@ if (!$userId) {
     exit;
 }
 
-// Fetch user information
-$sql = "SELECT name, email, academic_year, department FROM users WHERE id = ?";
+// Fetch user information with department name from departments table
+$sql = "SELECT u.name, u.email, u.academic_year, d.name as department 
+        FROM users u 
+        LEFT JOIN departments d ON u.department_id = d.id 
+        WHERE u.id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
