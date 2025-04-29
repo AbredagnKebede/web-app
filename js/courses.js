@@ -131,3 +131,45 @@ function openCourseModal(course) {
     // Show modal
     document.getElementById('courseModal').style.display = 'flex';
 }
+
+
+// Function to load user information from session
+function loadUserInfo() {
+    fetch('../php/get_user_info.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update user information in the UI
+                document.getElementById('academicYear').textContent = data.academic_year;
+                document.getElementById('department').textContent = data.department;
+                
+                // Also update the user name if it exists on the page
+                const userNameElement = document.getElementById('userName');
+                if (userNameElement) {
+                    userNameElement.textContent = data.name;
+                }
+                
+                // Get semester from URL parameter or default to 1
+                const urlParams = new URLSearchParams(window.location.search);
+                const semester = urlParams.get('semester') || '1';
+                
+                // Update semester information
+                document.getElementById('currentSemester').textContent = semester === '1' ? 'First Semester' : 'Second Semester';
+                document.getElementById('currentSemesterText').textContent = semester === '1' ? 'First Semester' : 'Second Semester';
+            } else {
+                // Handle error - redirect to login if user is not logged in
+                console.error('Error loading user info:', data.message);
+                if (data.message === 'User not logged in') {
+                    window.location.href = 'login.html';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching user info:', error);
+        });
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadUserInfo();
+});
