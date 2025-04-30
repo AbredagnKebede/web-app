@@ -63,29 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function fetchUserCourses() {
-    fetch('../api/get_user_courses.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('API Response:', data); // Debug: Log the API response
-            if (data.success) {
-                displayCourses(data.courses);
-            } else {
-                document.getElementById('noCoursesMessage').style.display = 'block';
-                console.error('Error fetching courses:', data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching courses:', error);
-            document.getElementById('noCoursesMessage').style.display = 'block';
-        });
-}
-
 function displayCourses(courses) {
     const grid = document.getElementById("coursesGrid");
     const noMessage = document.getElementById("noCoursesMessage");
@@ -126,26 +103,6 @@ function displayCourses(courses) {
         grid.appendChild(card);
     });
 }
-
-function openCourseModal(course) {
-    document.getElementById("modalCourseName").textContent = course.name || course.title;
-    document.getElementById("modalCourseCode").textContent = course.code;
-    document.getElementById("modalCreditHours").textContent = course.credit_hours || 'N/A';
-
-    document.getElementById("referencesList").innerHTML = `
-        <a href="${course.reference_link || '#'}" target="_blank">Reference Materials</a>
-    `;
-    document.getElementById("lecturesList").innerHTML = `
-        <a href="${course.lecture_note_link || '#'}" target="_blank">Lecture Notes</a>
-    `;
-    document.getElementById("examsList").innerHTML = `
-        <a href="${course.exam_link || '#'}" target="_blank">Past Exams</a>
-    `;
-    
-    // Show modal
-    document.getElementById('courseModal').style.display = 'flex';
-}
-
 
 // Function to load user information from session
 function loadUserInfo() {
