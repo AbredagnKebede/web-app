@@ -18,6 +18,34 @@ if ($conn->connect_error) {
     die(json_encode(['success' => false, 'message' => 'Connection failed: ' . $conn->connect_error]));
 }
 
+// Start session to get user info
+session_start();
+$userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
+if (!$userId) {
+    error_log("User not logged in");
+    echo json_encode(['success' => false, 'message' => 'User not logged in']);
+    exit;
+}
+
+// Get user's department_id and academic_year
+$userSql = "SELECT u.department_id, u.academic_year FROM users u WHERE u.id = ?";
+$userStmt = $conn->prepare($userSql);
+$userStmt->bind_param("i", $userId);
+$userStmt->execute();
+$userResult = $userStmt->get_result();
+
+if ($userResult->num_rows == 0) {
+    error_log("User information not found");
+    echo json_encode(['success' => false, 'message' => 'User information not found']);
+    exit;
+}
+
+$userInfo = $userResult->fetch_assoc();
+$departmentId = $userInfo['department_id'];
+$academicYear = $userInfo['academic_year'];
+$userStmt->close();
+
 // Get semester ID from request
 $semester = isset($_GET['semester']) ? $_GET['semester'] : null;
 
@@ -27,13 +55,16 @@ if (!$semester) {
     exit;
 }
 
-// Log the semester value for debugging
-error_log("Fetching courses for semester: " . $semester);
+// Log the parameters for debugging
+error_log("Fetching courses for semester: " . $semester . ", department: " . $departmentId . ", academic year: " . $academicYear);
 
-// Fetch courses for the selected semester
-$sql = "SELECT * FROM courses WHERE semester = ?";
+// Fetch courses for the selected semester, user's department and academic year
+$sql = "SELECT c.*, d.name as department_name 
+        FROM courses c 
+        JOIN departments d ON c.department_id = d.id 
+        WHERE c.semester = ? AND c.department_id = ? AND c.academic_year = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $semester);
+$stmt->bind_param("iis", $semester, $departmentId, $academicYear);
 $stmt->execute();
 $result = $stmt->get_result();
 
