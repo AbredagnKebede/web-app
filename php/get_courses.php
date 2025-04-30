@@ -1,23 +1,6 @@
 <?php
 // Database connection
-$servername = "localhost";
-$username = "root";
-$password = "bare@coat"; // Make sure this is correct
-$dbname = "sekay";
-
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    error_log("Connection failed: " . $conn->connect_error);
-    die(json_encode(['success' => false, 'message' => 'Connection failed: ' . $conn->connect_error]));
-}
-
+require_once '../api/connect.php';
 // Start session to get user info
 session_start();
 $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
