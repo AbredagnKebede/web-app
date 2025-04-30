@@ -8,17 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('currentSemesterText').textContent = semester === '1' ? 'First Semester Courses' : 'Second Semester Courses';
     }
     
-    // Update semester display
-    const currentSemesterText = document.getElementById('currentSemesterText');
-    const currentSemester = document.getElementById('currentSemester');
-    if (semester === '1') {
-        currentSemesterText.textContent = 'First Semester Courses';
-        currentSemester.textContent = 'First Semester';
-    } else if (semester === '2') {
-        currentSemesterText.textContent = 'Second Semester Courses';
-        currentSemester.textContent = 'Second Semester';
-    }
-    
     // Fetch user info
     fetch('../php/get_user_info.php')
         .then(response => response.json())
