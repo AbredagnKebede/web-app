@@ -1,3 +1,4 @@
+CREATE DATABASE sekay;
 use sekay;
 
 CREATE TABLE DEPARTMENTS (
@@ -11,7 +12,7 @@ CREATE TABLE USERS (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    academic_year INT,
+    academic_year VARCHAR(255) NOT NULL,
     department_id INT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(id)
@@ -82,3 +83,18 @@ INSERT INTO DEPARTMENTS (name, code) VALUES
 ('Chemical Engineering', 'CHEE'),
 ('Materials Science and Engineering', 'MSE'),
 ('Mechanical Engineering', 'ME');
+
+INSERT INTO COURSES (title, code, department_id, semester, academic_year) VALUES
+-- Core Courses
+('Advanced Software Engineering', 'SE301', 11, 2, 'Junior'),
+('Database Systems', 'SE302', 11, 2, 3),
+('Web Application Development', 'SE303', 11, 2, 'Junior'),
+('Software Testing and Quality Assurance', 'SE304', 11, 2, 'Junior'),
+('Mobile Application Development', 'SE305', 11, 2, 'Junior'),
+
+-- Elective Courses
+('Cloud Computing', 'SE306', 11, 2, 'Junior'),
+('Machine Learning for Software Engineers', 'SE307', 11, 2, 'Junior'),
+('Cybersecurity Fundamentals', 'SE308', 11, 2, 'Junior'),
+('DevOps and Continuous Integration', 'SE309', 11, 2, 'Junior'),
+('User Experience Design', 'SE310', 11, 2, 'Junior');
