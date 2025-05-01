@@ -104,6 +104,14 @@ function displayCourses(courses) {
                 </button>
             </div>
         `;
+        
+        // Add event listener to the View Materials button
+        const viewMaterialsBtn = card.querySelector('.view-materials-btn');
+        viewMaterialsBtn.addEventListener('click', function() {
+            // Navigate to materials.html with course ID as parameter
+            window.location.href = `materials.html?course_id=${course.id}&course_name=${encodeURIComponent(course.name || course.title)}`;
+        });
+        
         grid.appendChild(card);
-    });
+    });window.location.href = `materials.html?course_id=${course.id}&course_name=${encodeURIComponent(course.name || course.title)}&semester=${semester}&department=${encodeURIComponent(course.department_name || '')}`;
 }
