@@ -1,195 +1,76 @@
-/* === GENERAL STYLES === */
-:root {
-    --primary-color: #4361ee;
-    --primary-dark: #3a56d4;
-    --secondary-color: #7209b7;
-    --accent-color: #f72585;
-    --text-color: #333;
-    --text-light: #666;
-    --bg-color: #f5f7fa;
-    --card-bg: #ffffff;
-    --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    --border-radius: 12px;
-    --transition: all 0.3s ease;
-}
+/* Materials Page Styles */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-a {
-    text-decoration: none;
-    color: var(--primary-color);
-    transition: var(--transition);
-}
-
-a:hover {
-    color: var(--secondary-color);
-}
-
-ul {
-    list-style-type: none;
-}
-
-/* === HEADER === */
-.main-header {
-    background-color: var(--card-bg);
-    box-shadow: var(--shadow);
-    padding: 1rem 5%;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo a {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-decoration: none;
-}
-
-.logo {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.nav-links {
-    display: flex;
-    gap: 2rem;
-}
-
-.nav-links a {
-    color: var(--text-color);
-    font-weight: 500;
-    padding: 0.5rem 0;
-    position: relative;
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--accent-color);
-    transition: var(--transition);
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
-.menu-toggle {
-    display: none;
-    cursor: pointer;
-}
-
-.menu-toggle span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: var(--primary-color);
-    margin: 5px 0;
-    border-radius: 3px;
-    transition: var(--transition);
-}
-
-/* === CONTAINER === */
+/* Main container styling - only adding the min-height property that's specific to materials page */
 .container {
-    flex: 1;
-    padding: 2rem 5%;
-    max-width: 1200px;
-    margin: 0 auto;
+    min-height: calc(100vh - 150px);
 }
 
-/* === BREADCRUMB === */
-.breadcrumb {
-    margin-bottom: 2rem;
-    font-size: 0.9rem;
-    color: var(--text-light);
-    background-color: var(--card-bg);
-    padding: 0.8rem 1.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.breadcrumb a {
-    color: var(--primary-color);
-}
-
+/* Breadcrumb navigation - materials page specific styles */
 .breadcrumb a:hover {
     text-decoration: underline;
 }
 
-/* === MATERIAL TYPE SECTION === */
-.material-type-section {
-    padding: 2rem 0;
-}
-
+/* Course header styling */
 .course-header {
+    margin-bottom: 2rem;
     display: flex;
     align-items: baseline;
+    flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: 1rem;
+    position: relative;
 }
 
-.material-type-section h1 {
-    font-size: 2.5rem;
-    color: var(--text-color);
+.course-header h1 {
+    margin-bottom: 1.5rem;
+    margin-right: 1rem;
     position: relative;
     display: inline-block;
+    color: var(--text-color);
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.course-header h1::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 80px;
+    height: 4px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
 }
 
 .course-code {
-    font-size: 1.1rem;
-    padding: 0.3rem 0.8rem;
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 50px;
+    font-size: 1rem;
+    color: var(--text-light);
+    background-color: rgba(67, 97, 238, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
     font-weight: 500;
+    display: inline-flex;
+    align-items: center;
 }
 
+/* Section intro text */
 .section-intro {
+    margin-bottom: 2rem;
     font-size: 1.1rem;
-    margin-bottom: 2.5rem;
     color: var(--text-light);
 }
 
+/* Material cards grid */
 .material-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
+    margin-bottom: 3rem;
 }
 
 .material-card {
     background-color: var(--card-bg);
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
+    box-shadow: var(--box-shadow);
     overflow: hidden;
     transition: var(--transition);
     display: flex;
@@ -198,69 +79,44 @@ ul {
 }
 
 .material-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .card-content {
-    padding: 2rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    padding: 1.5rem;
+    flex-grow: 1;
 }
 
 .material-icon {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 16px;
-    background: linear-gradient(120deg, #e0f2fe, #bae6fd);
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
     color: var(--primary-color);
 }
 
-.material-card[data-type="references"] .material-icon {
-    background: linear-gradient(120deg, #e0f2fe, #bae6fd);
-    color: #0284c7;
-}
-
-.material-card[data-type="lecture-notes"] .material-icon {
-    background: linear-gradient(120deg, #fae8ff, #f5d0fe);
-    color: #a21caf;
-}
-
-.material-card[data-type="exams"] .material-icon {
-    background: linear-gradient(120deg, #fee2e2, #fecaca);
-    color: #dc2626;
-}
-
 .material-icon svg {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    height: 100%;
 }
 
 .material-card h2 {
     font-size: 1.5rem;
-    margin-bottom: 0.8rem;
-    color: var(--text-color);
+    margin-bottom: 0.5rem;
 }
 
 .material-card p {
     color: var(--text-light);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
 }
 
 .card-footer {
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
     background-color: rgba(0, 0, 0, 0.02);
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .material-count {
@@ -268,273 +124,144 @@ ul {
     color: var(--text-light);
 }
 
+/* Button styles specific to materials page */
 .btn-access {
-    padding: 0.5rem 1.2rem;
     background-color: var(--primary-color);
     color: white;
-    border: none;
-    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
 }
 
 .btn-access:hover {
     background-color: var(--primary-dark);
+    transform: translateY(-2px);
 }
 
-.material-card[data-type="references"] .btn-access {
-    background-color: #0284c7;
-}
-
-.material-card[data-type="references"] .btn-access:hover {
-    background-color: #0369a1;
-}
-
-.material-card[data-type="lecture-notes"] .btn-access {
-    background-color: #a21caf;
-}
-
-.material-card[data-type="lecture-notes"] .btn-access:hover {
-    background-color: #86198f;
-}
-
-.material-card[data-type="exams"] .btn-access {
-    background-color: #dc2626;
-}
-
-.material-card[data-type="exams"] .btn-access:hover {
-    background-color: #b91c1c;
-}
-
-/* === AI ASSISTANT === */
-.ai-assistant-container {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 999;
-}
-
-.ai-assistant-button {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    border: none;
+/* Error message styling */
+.error-message {
+    background-color: rgba(255, 82, 82, 0.1);
+    color: #ff5252;
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #ff5252;
+    font-size: 1rem;
+    line-height: 1.5;
     display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
+}
+
+.error-message::before {
+    content: '⚠️';
+    margin-right: 0.75rem;
     font-size: 1.2rem;
-    font-weight: bold;
 }
 
-.ai-assistant-button:hover {
-    transform: scale(1.1);
+/* Breadcrumb navigation - specific to materials page */
+.breadcrumb .current {
+    color: var(--primary-color);
+    font-weight: 500;
 }
 
-.ai-chat-window {
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    width: 350px;
-    height: 450px;
+.breadcrumb .current {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Go back button - keeping only materials-specific styles */
+.go-back {
+    margin-top: 1rem;
+}
+
+.go-back::before {
+    content: '←';
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* Material content section */
+.material-content-section {
     background-color: var(--card-bg);
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    padding: 2rem;
+    margin-top: 2rem;
 }
 
-.ai-chat-window.active {
+.material-content-header {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.ai-chat-header {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    padding: 1rem;
+.material-content-header h2 {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .material-cards {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .course-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .course-header h1 {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .material-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .container {
+        padding: 1rem;
+    }
+    
+    .course-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .breadcrumb {
+        font-size: 0.8rem;
+    }
+    
+    .error-message {
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* Note: Theme toggle button styles are imported from common.css */
+
+/* Fix for header navigation alignment */
+.main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.ai-chat-header button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.ai-chat-messages {
-    flex: 1;
-    padding: 1rem;
-    overflow-y: auto;
-}
-
-.ai-message {
-    background-color: #f0f2f5;
-    border-radius: 15px;
-    padding: 0.8rem;
-    margin-bottom: 0.8rem;
-    max-width: 80%;
-}
-
-.ai-chat-input {
-    padding: 0.8rem;
+.nav-links {
     display: flex;
-    gap: 0.5rem;
-    border-top: 1px solid #eee;
-}
-
-.ai-chat-input textarea {
-    flex: 1;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding: 0.8rem;
-    resize: none;
-    height: 40px;
-    outline: none;
-}
-
-.ai-chat-input button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.ai-chat-input button:hover {
-    background-color: var(--primary-dark);
-}
-
-/* === FOOTER === */
-.main-footer {
-    background-color: var(--card-bg);
-    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
-    padding: 2rem 5%;
-    text-align: center;
-    margin-top: auto;
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
     gap: 1.5rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
+    margin-left: auto; /* This pushes the navigation to the right */
 }
 
-.footer-links a {
-    color: var(--text-light);
-    font-size: 0.9rem;
-}
-
-.footer-links a:hover {
-    color: var(--primary-color);
-}
-
-.main-footer p {
-    color: var(--text-light);
-    font-size: 0.9rem;
-}
-
-/* === ANIMATIONS === */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.material-card {
-    animation: fadeIn 0.5s ease-in-out;
-    animation-fill-mode: both;
-}
-
-.material-card:nth-child(1) {
-    animation-delay: 0.1s;
-}
-
-.material-card:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.material-card:nth-child(3) {
-    animation-delay: 0.3s;
-}
-
-/* === RESPONSIVE DESIGN === */
-@media (max-width: 980px) {
-    .material-cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
+/* Ensure the menu toggle doesn't affect alignment */
+.menu-toggle {
+    display: none; /* Hide on desktop */
 }
 
 @media (max-width: 768px) {
-    .nav-links {
-        position: fixed;
-        top: 70px;
-        right: -100%;
-        background-color: var(--card-bg);
-        width: 100%;
-        height: calc(100vh - 70px);
-        flex-direction: column;
-        padding: 2rem;
-        transition: var(--transition);
-        box-shadow: var(--shadow);
-        gap: 1.5rem;
-    }
-
-    .nav-links.active {
-        right: 0;
-    }
-
     .menu-toggle {
-        display: block;
-    }
-
-    .course-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-
-    .material-cards {
-        grid-template-columns: 1fr;
+        display: flex; /* Show on mobile */
     }
 }
-
-@media (max-width: 480px) {
-    .ai-chat-window {
-        width: calc(100vw - 20px);
-        height: 400px;
-        right: -10px;
-    }
-    
-    .main-header {
-        padding: 1rem 3%;
-    }
-    
-    .container {
-        padding: 1.5rem 3%;
-    }
-}
-
-/* JavaScript Toggle Support */
-.nav-links.active {
-    right: 0;
-}
- 
