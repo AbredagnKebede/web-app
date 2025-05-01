@@ -3,9 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Material Types | Sekay</title>
+    <link rel="stylesheet" href="../css/materials.css">
 </head>
 <body>
-    <h1>coming soon</h1>
+    <header class="main-header">
+        <div class="logo"><a href="home.html">Sekay</a></div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="#" id="profileLink">Profile</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumb">
+            <a href="home.html">Home</a> &gt; 
+            <a href="semester-selection.html">Select Semester</a> &gt; 
+            <a href="#" id="coursesLink">Courses</a> &gt; 
+            <span id="courseCrumb">Course Name</span>
+        </div>
+
+        <section class="material-type-section">
+            <div class="course-header">
+                <h1 id="courseTitle">Course Title</h1>
+                <span class="course-code" id="courseCode">CSE101</span>
+            </div>
+            <p class="section-intro">Select the type of material you want to access</p>
+            
+            <div class="material-cards">
+                <div class="material-card" data-type="references">
+                    <div class="card-content">
+                        <div class="material-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM5 19V5H19V19H5Z" fill="currentColor"/>
+                                <path d="M7 7H11V11H7V7Z" fill="currentColor"/>
+                                <path d="M13 7H17V9H13V7Z" fill="currentColor"/>
+                                <path d="M13 11H17V13H13V11Z" fill="currentColor"/>
+                                <path d="M7 13H17V17H7V13Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h2>References</h2>
+                        <p>Textbooks and reference materials</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="material-count">12 items</span>
+                        <button class="btn-access">Access</button>
+                    </div>
+                </div>
+                <div class="material-card" data-type="lecture-notes">
+                    <div class="card-content">
+                        <div class="material-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 3H14.82C14.4 1.84 13.3 1 12 1C10.7 1 9.6 1.84 9.18 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM12 3C12.55 3 13 3.45 13 4C13 4.55 12.55 5 12 5C11.45 5 11 4.55 11 4C11 3.45 11.45 3 12 3ZM7 7H17V9H7V7ZM7 11H17V13H7V11ZM7 15H13V17H7V15Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h2>Lecture Notes</h2>
+                        <p>Notes organized by chapter or week</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="material-count">8 items</span>
+                        <button class="btn-access">Access</button>
+                    </div>
+                </div>
+                <div class="material-card" data-type="exams">
+                    <div class="card-content">
+                        <div class="material-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 3H19C20.1 3 21 3.9 21 5V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3ZM7 7V9H9V7H7ZM11 7V9H13V7H11ZM15 7V9H17V7H15ZM7 11V13H9V11H7ZM11 11V13H13V11H11ZM15 11V13H17V11H15ZM7 15V17H9V15H7ZM11 15V17H13V15H11ZM15 15V17H17V15H15Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h2>Exams</h2>
+                        <p>Past tests, midterms, and finals</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="material-count">5 items</span>
+                        <button class="btn-access">Access</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="ai-assistant-container">
+        <div class="ai-chat-window" id="aiChatWindow">
+            <div class="ai-chat-header">
+                <h3>AI Assistant</h3>
+                <button id="closeAiChat">×</button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message">
+                    <p>Hello! I'm your Sekay assistant. How can I help you today?</p>
+                </div>
+            </div>
+            <div class="ai-chat-input">
+                <textarea id="aiChatInput" placeholder="Type your question..."></textarea>
+                <button id="sendAiMessage" class="btn btn-primary btn-small">Send</button>
+            </div>
+        </div>
+        <button class="ai-assistant-button" id="aiAssistantButton">
+            <span>AI</span>
+        </button>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <p>&copy; 2025 Sekay - Academic Resource Hub</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/course-materials.js"></script>
+    <script src="js/ai-assistant.js"></script>
 </body>
 </html>
