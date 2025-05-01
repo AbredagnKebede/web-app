@@ -14,6 +14,9 @@ CREATE TABLE USERS (
     password_hash VARCHAR(255) NOT NULL,
     academic_year VARCHAR(255) NOT NULL,
     department_id INT,
+    reference_link TEXT,
+    lecture_note_link TEXT,
+    exam_link TEXT;
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(id)
 );
