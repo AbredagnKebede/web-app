@@ -23,20 +23,19 @@ if (!$courseId) {
 // Log the parameters for debugging
 error_log("Fetching materials for course ID: " . $courseId . ", user ID: " . $userId);
 
-// Fetch user's materials for this course
-// First, check if the user is enrolled in this course and has access to materials
-$sql = "SELECT u.reference_link, u.lecture_note_link, u.exam_link 
-        FROM users u 
-        WHERE u.id = ?";
+// Fetch materials for this course from the courses table
+$sql = "SELECT reference_link, lecture_note_link, exam_link 
+        FROM courses 
+        WHERE id = ?";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $userId);
+$stmt->bind_param("i", $courseId);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    error_log("User materials not found");
-    echo json_encode(['success' => false, 'message' => 'User materials not found']);
+    error_log("Course materials not found");
+    echo json_encode(['success' => false, 'message' => 'Course materials not found']);
     exit;
 }
 
@@ -45,13 +44,10 @@ $materials = $result->fetch_assoc();
 // Log the results for debugging
 error_log("Found materials: " . json_encode($materials));
 
+// Return the materials
 echo json_encode([
-    'success' => true, 
-    'materials' => [
-        'reference_link' => $materials['reference_link'],
-        'lecture_note_link' => $materials['lecture_note_link'],
-        'exam_link' => $materials['exam_link']
-    ]
+    'success' => true,
+    'materials' => $materials
 ]);
 
 $stmt->close();
