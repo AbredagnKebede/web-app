@@ -61,58 +61,52 @@ function fetchCourseMaterials(courseId) {
 }
 
 function displayMaterials(materials) {
-    // Get reference to material elements
+    // Update reference link
     const referenceLink = document.getElementById('referenceLink');
-    const lectureLink = document.getElementById('lectureLink');
-    const examLink = document.getElementById('examLink');
-    
-    const referenceCount = document.getElementById('referenceCount');
-    const lectureCount = document.getElementById('lectureCount');
-    const examCount = document.getElementById('examCount');
-    
-    // Update reference materials
     if (materials.reference_link) {
         referenceLink.href = materials.reference_link;
-        referenceLink.classList.add('active');
-        referenceCount.textContent = 'Available';
+        referenceLink.target = "_blank"; // Add this line to open in new tab
+        referenceLink.rel = "noopener noreferrer"; // Security best practice for external links
+        document.getElementById('referenceCount').textContent = '1 Available';
     } else {
         referenceLink.href = '#';
-        referenceLink.classList.add('disabled');
-        referenceLink.addEventListener('click', function(e) {
+        referenceLink.onclick = function(e) {
             e.preventDefault();
             alert('No reference materials available for this course');
-        });
-        referenceCount.textContent = 'Not available';
+        };
+        document.getElementById('referenceCount').textContent = 'None';
     }
     
-    // Update lecture notes
+    // Update lecture notes link
+    const lectureLink = document.getElementById('lectureLink');
     if (materials.lecture_note_link) {
         lectureLink.href = materials.lecture_note_link;
-        lectureLink.classList.add('active');
-        lectureCount.textContent = 'Available';
+        lectureLink.target = "_blank"; // Add this line to open in new tab
+        lectureLink.rel = "noopener noreferrer"; // Security best practice for external links
+        document.getElementById('lectureCount').textContent = '1 Available';
     } else {
         lectureLink.href = '#';
-        lectureLink.classList.add('disabled');
-        lectureLink.addEventListener('click', function(e) {
+        lectureLink.onclick = function(e) {
             e.preventDefault();
             alert('No lecture notes available for this course');
-        });
-        lectureCount.textContent = 'Not available';
+        };
+        document.getElementById('lectureCount').textContent = 'None';
     }
     
-    // Update exam materials
+    // Update exam link
+    const examLink = document.getElementById('examLink');
     if (materials.exam_link) {
         examLink.href = materials.exam_link;
-        examLink.classList.add('active');
-        examCount.textContent = 'Available';
+        examLink.target = "_blank"; // Add this line to open in new tab
+        examLink.rel = "noopener noreferrer"; // Security best practice for external links
+        document.getElementById('examCount').textContent = '1 Available';
     } else {
         examLink.href = '#';
-        examLink.classList.add('disabled');
-        examLink.addEventListener('click', function(e) {
+        examLink.onclick = function(e) {
             e.preventDefault();
             alert('No exam materials available for this course');
-        });
-        examCount.textContent = 'Not available';
+        };
+        document.getElementById('examCount').textContent = 'None';
     }
 }
 

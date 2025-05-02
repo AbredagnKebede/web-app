@@ -14,21 +14,21 @@ CREATE TABLE USERS (
     password_hash VARCHAR(255) NOT NULL,
     academic_year VARCHAR(255) NOT NULL,
     department_id INT,
-    reference_link TEXT,
-    lecture_note_link TEXT,
-    exam_link TEXT;
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(id)
 );
 
-CREATE TABLE COURSES (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(100) NOT NULL,
-    code VARCHAR(20) NOT NULL,
-    department_id INT,
-    semester INT,
-    academic_year INT,
-    FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(id)
+CREATE TABLE COURSES ( 
+    id INT PRIMARY KEY AUTO_INCREMENT, 
+    title VARCHAR(100) NOT NULL, 
+    code VARCHAR(20) NOT NULL, 
+    department_id INT, 
+    semester INT, 
+    academic_year VARCHAR(255) NOT NULL,                                               
+    reference_link TEXT, 
+    lecture_note_link TEXT, 
+    exam_link TEXT, 
+    FOREIGN KEY (department_id) REFERENCES DEPARTMENTS(id) 
 );
 
 CREATE TABLE MATERIALS (
