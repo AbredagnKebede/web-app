@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Reader | Sekay</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/materials.css">
+    <link rel="stylesheet" href="../css/reader.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
+    <header class="main-header">
+        <div class="logo"><a href="home.html">Sekay</a></div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" id="profileLink"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <div class="dark-mode-toggle">
+        <button id="lightModeBtn" class="active">☀️</button>
+        <button id="darkModeBtn">🌙</button>
+    </div>
+
+    <main class="container">
+        <div class="breadcrumb">
+            <a href="home.html">Home</a> &gt; 
+            <a href="semester-selection.html">Select Semester</a> &gt; 
+            <a href="#" id="coursesLink">Courses</a> &gt;
+            <a href="#" id="materialsLink">Materials</a> &gt;
+            <span id="documentType">Document</span>
+        </div>
+
+        <div class="reader-header">
+            <h1 id="documentTitle">Document Title</h1>
+            <div class="reader-actions">
+                <a href="#" id="downloadBtn" class="btn-primary" target="_blank">
+                    <i class="fas fa-download"></i> Download
+                </a>
+                <button id="askAiBtn" class="btn-secondary">
+                    <i class="fas fa-robot"></i> Ask AI
+                </button>
+            </div>
+        </div>
+
+        <div class="document-container">
+            <iframe id="documentViewer" allowfullscreen></iframe>
+        </div>
+    </main>
+
+    <div class="ai-assistant-container">
+        <div class="ai-chat-window" id="aiChatWindow">
+            <div class="ai-chat-header">
+                <h3>AI Assistant</h3>
+                <button id="closeAiChat">×</button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message">
+                    <p>Hello! I can help you understand this document. How can I help you today?</p>
+                </div>
+            </div>
+            <div class="ai-chat-input">
+                <textarea id="aiChatInput" placeholder="Type your question..."></textarea>
+                <button id="sendAiMessage" class="btn btn-primary btn-small">Send</button>
+            </div>
+        </div>
+        <button class="ai-assistant-button" id="aiAssistantButton">
+            <span>AI</span>
+        </button>
+    </div>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Sekay - Academic Resource Hub</p>
+    </footer>
+
+    <script src="../js/ai-assistant.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/reader.js"></script>
+</body>
+</html>
