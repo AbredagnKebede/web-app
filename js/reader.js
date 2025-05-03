@@ -25,13 +25,15 @@ document.addEventListener('DOMContentLoaded', function() {
             materialTitle = 'Course Material';
     }
     
-    document.getElementById('materialTypeCrumb').textContent = materialTitle;
-    document.getElementById('materialTitle').textContent = materialTitle;
+    // Update to use the correct element ID: documentType instead of materialTypeCrumb
+    document.getElementById('documentType').textContent = materialTitle;
+    // Update to use the correct element ID: documentTitle instead of materialTitle
+    document.getElementById('documentTitle').textContent = materialTitle;
     document.title = `${materialTitle} | Sekay`;
     
     // Load the document in the iframe
     if (materialUrl) {
-        document.getElementById('documentFrame').src = materialUrl;
+        document.getElementById('documentViewer').src = materialUrl;
     } else {
         showError('Material URL not provided');
     }
@@ -91,6 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
             sendMessageToAi();
         }
     });
+    
+    const imageUpload = document.getElementById('imageUpload');
     
     imageUpload.addEventListener('change', function(e) {
         if (e.target.files.length > 0) {
@@ -333,4 +337,11 @@ document.addEventListener('DOMContentLoaded', function() {
     askAiBtn.addEventListener('click', function() {
         aiChatWindow.style.display = 'block';
     });
+ng     // Add this after your other event listeners
+    const uploadImageBtn = document.getElementById('uploadImageBtn');
+    if (uploadImageBtn) {
+        uploadImageBtn.addEventListener('click', function() {
+            imageUpload.click();
+        });
+    }
 });
