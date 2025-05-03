@@ -113,3 +113,13 @@
         height: 60vh;
     }
 }
+ the 
+/* Add styling for the image upload button */
+#uploadImageBtn {
+    margin-left: 5px;
+}
+
+.ai-chat-input {
+    display: flex;
+    align-items: center;
+}
