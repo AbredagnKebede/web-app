@@ -25,34 +25,97 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up course link
     document.getElementById('coursesLink').href = 'courses.html';
     
-    // Set up access buttons to open reader page instead of new tab
-    const accessButtons = document.querySelectorAll('.btn-access');
-    
-    accessButtons.forEach(button => {
-        // Remove target="_blank" attribute
-        button.removeAttribute('target');
-        
-        // Add click event listener
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get material type from parent card
-            const materialCard = this.closest('.material-card');
-            const materialType = materialCard.getAttribute('data-type');
-            
-            // Get the original URL (assuming it's set in the href)
-            const materialUrl = this.getAttribute('href');
-            
-            // Redirect to reader page with parameters
-            window.location.href = `reader.html?course_id=${courseId}&course_name=${encodeURIComponent(courseName)}&material_type=${materialType}&material_url=${encodeURIComponent(materialUrl)}`;
-        });
-    });
-    
-    // Simulate loading material counts (replace with actual data fetching)
-    document.getElementById('referenceCount').textContent = '5 References';
-    document.getElementById('lectureCount').textContent = '12 Lecture Notes';
-    
-    // Set example links (replace with actual data)
-    document.getElementById('referenceLink').href = 'path/to/references.pdf';
-    document.getElementById('lectureLink').href = 'path/to/lectures.pdf';
+    // Fetch course materials from the database
+    if (courseId) {
+        fetchCourseMaterials(courseId);
+    } else {
+        console.error('No course ID provided');
+        showError('Course information not found. Please go back and try again.');
+    }
 });
+
+function fetchCourseMaterials(courseId) {
+    // Fetch user's materials for this course
+    fetch(`../php/get_materials.php?course_id=${courseId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                displayMaterials(data.materials, courseId);
+            } else {
+                console.error('Error fetching materials:', data.message);
+                showError(data.message || 'Failed to load course materials');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showError('Failed to load course materials. Please try again later.');
+        });
+}
+
+function displayMaterials(materials, courseId) {
+    const courseName = getUrlParams().course_name;
+    
+    // Update reference link
+    const referenceLink = document.getElementById('referenceLink');
+    if (materials.reference_link) {
+        // Redirect to reader page with the material URL
+        referenceLink.href = `reader.html?course_id=${courseId}&course_name=${encodeURIComponent(courseName)}&material_type=reference&material_url=${encodeURIComponent(materials.reference_link)}`;
+        referenceLink.removeAttribute('target'); // Remove target="_blank"
+        document.getElementById('referenceCount').textContent = '1 Available';
+    } else {
+        referenceLink.href = '#';
+        referenceLink.onclick = function(e) {
+            e.preventDefault();
+            alert('No reference materials available for this course');
+        };
+        document.getElementById('referenceCount').textContent = 'None';
+    }
+    
+    // Update lecture notes link
+    const lectureLink = document.getElementById('lectureLink');
+    if (materials.lecture_note_link) {
+        // Redirect to reader page with the material URL
+        lectureLink.href = `reader.html?course_id=${courseId}&course_name=${encodeURIComponent(courseName)}&material_type=lecture&material_url=${encodeURIComponent(materials.lecture_note_link)}`;
+        lectureLink.removeAttribute('target'); // Remove target="_blank"
+        document.getElementById('lectureCount').textContent = '1 Available';
+    } else {
+        lectureLink.href = '#';
+        lectureLink.onclick = function(e) {
+            e.preventDefault();
+            alert('No lecture notes available for this course');
+        };
+        document.getElementById('lectureCount').textContent = 'None';
+    }
+    
+    // Update exam link
+    const examLink = document.getElementById('examLink');
+    if (materials.exam_link) {
+        // Redirect to reader page with the material URL
+        examLink.href = `reader.html?course_id=${courseId}&course_name=${encodeURIComponent(courseName)}&material_type=exam&material_url=${encodeURIComponent(materials.exam_link)}`;
+        examLink.removeAttribute('target'); // Remove target="_blank"
+        document.getElementById('examCount').textContent = '1 Available';
+    } else {
+        examLink.href = '#';
+        examLink.onclick = function(e) {
+            e.preventDefault();
+            alert('No exam materials available for this course');
+        };
+        document.getElementById('examCount').textContent = 'None';
+    }
+}
+
+function showError(message) {
+    // Display error message to user
+    const container = document.querySelector('.material-cards');
+    container.innerHTML = `
+        <div class="error-message">
+            <p>${message}</p>
+            <button onclick="window.history.back()" class="btn-primary">Go Back</button>
+        </div>
+    `;
+}
