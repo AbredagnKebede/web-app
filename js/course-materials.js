@@ -64,9 +64,10 @@ function displayMaterials(materials) {
     // Update reference link
     const referenceLink = document.getElementById('referenceLink');
     if (materials.reference_link) {
-        referenceLink.href = materials.reference_link;
-        referenceLink.target = "_blank"; // Add this line to open in new tab
-        referenceLink.rel = "noopener noreferrer"; // Security best practice for external links
+        // Redirect to reader page instead of opening in new tab
+        referenceLink.href = `reader.html?course_id=${getUrlParam('course_id')}&course_name=${encodeURIComponent(getUrlParam('course_name'))}&material_type=reference&material_url=${encodeURIComponent(materials.reference_link)}`;
+        referenceLink.target = ""; // Remove target="_blank"
+        referenceLink.rel = ""; // Remove rel attribute
         document.getElementById('referenceCount').textContent = '1 Available';
     } else {
         referenceLink.href = '#';
@@ -80,9 +81,10 @@ function displayMaterials(materials) {
     // Update lecture notes link
     const lectureLink = document.getElementById('lectureLink');
     if (materials.lecture_note_link) {
-        lectureLink.href = materials.lecture_note_link;
-        lectureLink.target = "_blank"; // Add this line to open in new tab
-        lectureLink.rel = "noopener noreferrer"; // Security best practice for external links
+        // Redirect to reader page instead of opening in new tab
+        lectureLink.href = `reader.html?course_id=${getUrlParam('course_id')}&course_name=${encodeURIComponent(getUrlParam('course_name'))}&material_type=lecture&material_url=${encodeURIComponent(materials.lecture_note_link)}`;
+        lectureLink.target = ""; // Remove target="_blank"
+        lectureLink.rel = ""; // Remove rel attribute
         document.getElementById('lectureCount').textContent = '1 Available';
     } else {
         lectureLink.href = '#';
@@ -96,9 +98,10 @@ function displayMaterials(materials) {
     // Update exam link
     const examLink = document.getElementById('examLink');
     if (materials.exam_link) {
-        examLink.href = materials.exam_link;
-        examLink.target = "_blank"; // Add this line to open in new tab
-        examLink.rel = "noopener noreferrer"; // Security best practice for external links
+        // Redirect to reader page instead of opening in new tab
+        examLink.href = `reader.html?course_id=${getUrlParam('course_id')}&course_name=${encodeURIComponent(getUrlParam('course_name'))}&material_type=exam&material_url=${encodeURIComponent(materials.exam_link)}`;
+        examLink.target = ""; // Remove target="_blank"
+        examLink.rel = ""; // Remove rel attribute
         document.getElementById('examCount').textContent = '1 Available';
     } else {
         examLink.href = '#';
@@ -108,6 +111,12 @@ function displayMaterials(materials) {
         };
         document.getElementById('examCount').textContent = 'None';
     }
+}
+
+// Add this helper function to get URL parameters
+function getUrlParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
 }
 
 function showError(message) {
