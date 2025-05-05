@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Sekay</title>
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
+    <header class="main-header">
+        <div class="logo">Sekay</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="profile.html" class="active"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="dark-mode-toggle">
+        <button id="lightModeBtn" class="active">☀️</button>
+        <button id="darkModeBtn">🌙</button>
+    </div>
+
+    <main class="container">
+        <section class="profile-section">
+            <h1>Your Profile</h1>
+            <div class="profile-card">
+                <div class="profile-header">
+                    <!-- Profile picture section removed -->
+                    <div class="profile-info">
+                        <h2 id="profileName">Loading...</h2>
+                        <p id="profileEmail">Email: Loading...</p>
+                        <p id="profileDepartment">Department: Loading...</p>
+                        <p id="profileYear">Academic Year: Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Sekay - Academic Resource Hub</p>
+    </footer>
+    
+    <div class="ai-assistant-container">
+        <div class="ai-chat-window" id="aiChatWindow">
+            <div class="ai-chat-header">
+                <h3>AI Assistant</h3>
+                <button id="closeAiChat">×</button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message">
+                    <p>Hello! I'm your Sekay assistant. How can I help you today?</p>
+                </div>
+            </div>
+            <div class="ai-chat-input">
+                <textarea id="aiChatInput" placeholder="Type your question..."></textarea>
+                <button id="sendAiMessage" class="btn btn-primary btn-small">Send</button>
+            </div>
+        </div>
+        <button class="ai-assistant-button" id="aiAssistantButton">
+            <span>AI</span>
+        </button>
+    </div>
+    
+    <script src="../js/ai-assistant.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+</html>
