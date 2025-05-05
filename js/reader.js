@@ -198,16 +198,69 @@ function handleAIPrompt(prompt) {
     responseContainer.style.display = 'block';
     aiResponse.innerHTML = '<p>Thinking...</p>';
     
-    // In a real implementation, this would call an AI API
-    // For now, we'll simulate a response
-    setTimeout(function() {
-        const documentTitle = document.getElementById('documentTitle').textContent;
-        aiResponse.innerHTML = `
-            <p>Based on the document "${documentTitle}", here's what I can tell you:</p>
-            <p>This is a simulated AI response. In a real implementation, this would analyze the document content and provide a relevant answer to your question: "${prompt}"</p>
-            <p>To get actual AI assistance, you would need to integrate with an AI service API.</p>
-        `;
-    }, 1500);
+    // Get document context information
+    const materialType = getUrlParam('material_type') || '';
+    const materialUrl = getUrlParam('material_url') || '';
+    const courseId = getUrlParam('course_id') || '';
+    
+    // Prepare data for API request
+    const requestData = {
+        message: prompt,
+        materialType: materialType,
+        materialUrl: materialUrl,
+        courseId: courseId
+    };
+    
+    // Make API call to Gemini API endpoint
+    fetch('../api/gemini_api.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Format the response with markdown-to-html conversion
+            aiResponse.innerHTML = formatAIResponse(data.response);
+        } else {
+            aiResponse.innerHTML = `<p class="ai-error">Error: ${data.message || 'Failed to get response from AI'}</p>`;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        aiResponse.innerHTML = '<p class="ai-error">An error occurred while communicating with the AI service.</p>';
+    });
+}
+
+/**
+ * Helper function to format AI response text with basic markdown support
+ */
+function formatAIResponse(text) {
+    if (!text) return '';
+    
+    // Convert markdown to HTML (basic implementation)
+    // Replace ** for bold
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Replace * for italic
+    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    // Replace code blocks
+    text = text.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+    // Replace inline code
+    text = text.replace(/`(.*?)`/g, '<code>$1</code>');
+    // Replace line breaks with <br>
+    text = text.replace(/\n/g, '<br>');
+    
+    return text;
+}
+
+/**
+ * Helper function to get URL parameters
+ */
+function getUrlParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
 }
 
 /**
@@ -225,12 +278,4 @@ function checkUserSession() {
         .catch(error => {
             console.error('Error checking session:', error);
         });
-}
-
-/**
- * Helper function to get URL parameters
- */
-function getUrlParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
 }
