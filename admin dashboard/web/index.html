@@ -1,0 +1,2380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sekay Admin Dashboard</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3a56e4;
+            --secondary: #7986cb;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196f3;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #fff;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            z-index: 100;
+            padding: 20px 0;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-logo i {
+            font-size: 1.8rem;
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            top: 20px;
+            right: -12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            gap: 12px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(58, 86, 228, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-text {
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed .nav-text, .sidebar.collapsed .sidebar-logo span {
+            display: none;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            transition: var(--transition);
+            max-width: calc(100vw - 250px);
+        }
+
+        .main-content.expanded {
+            max-width: calc(100vw - 70px);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .topbar-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-button {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            gap: 10px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .user-button:hover {
+            background-color: var(--gray-light);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            width: 200px;
+            z-index: 100;
+            overflow: hidden;
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .dropdown-menu.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+            gap: 10px;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--gray-light);
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid var(--gray-light);
+            margin: 5px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            background-color: white;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .tab-container {
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--gray-light);
+            overflow-x: auto;
+            padding-bottom: 1px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--gray-light);
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #304ad9;
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #dde2e6;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #43a047;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background-color: var(--info);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #1e88e5;
+        }
+
+        .btn-delete {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #d32f2f;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 86, 228, 0.2);
+        }
+
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            transition: var(--transition);
+            background-color: white;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 86, 228, 0.2);
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 86, 228, 0.2);
+        }
+
+        .form-control.is-invalid {
+            border-color: var(--danger);
+        }
+
+        .invalid-feedback {
+            display: block;
+            width: 100%;
+            margin-top: 5px;
+            font-size: 0.875rem;
+            color: var(--danger);
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #43a047;
+        }
+
+        .alert-danger {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #e53935;
+        }
+
+        .alert-warning {
+            background-color: #fff8e1;
+            color: #ef6c00;
+            border-left: 4px solid #ff9800;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .badge-primary {
+            background-color: rgba(58, 86, 228, 0.1);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--danger);
+        }
+
+        .file-upload {
+            border: 2px dashed var(--gray-light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .file-upload-text {
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .file-upload-input {
+            display: none;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-list-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            background-color: var(--gray-light);
+            margin-bottom: 10px;
+        }
+
+        .file-list-icon {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .file-list-info {
+            flex: 1;
+        }
+
+        .file-list-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .file-list-size {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .file-list-remove {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-list-remove:hover {
+            color: #d32f2f;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            min-width: 300px;
+            max-width: 400px;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            animation: slideIn 0.3s forwards, fadeOut 0.3s 3s forwards;
+        }
+
+        @keyframes slideIn {
+            to { transform: translateX(0); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; }
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .toast-success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast-danger .toast-icon {
+            color: var(--danger);
+        }
+
+        .toast-warning .toast-icon {
+            color: var(--warning);
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-message {
+            color: var(--gray);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toast-close:hover {
+            color: var(--danger);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .pagination-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: white;
+            color: var(--dark);
+            border: 1px solid var(--gray-light);
+        }
+
+        .pagination-item:hover {
+            background-color: var(--gray-light);
+        }
+
+        .pagination-item.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .pagination-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Utilities */
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                height: 100vh;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                max-width: 100%;
+            }
+
+            .main-content.expanded {
+                max-width: 100%;
+            }
+
+            .mobile-menu-toggle {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .user-dropdown {
+                align-self: flex-end;
+            }
+
+            .filter-container {
+                flex-direction: column;
+            }
+
+            .table-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .tab-buttons {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
+
+            .modal {
+                width: 95%;
+            }
+
+            .modal-footer {
+                flex-direction: column;
+            }
+
+            .modal-footer .btn {
+                width: 100%;
+            }
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background-color: white;
+            color: var(--dark);
+            cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            box-shadow: var(--box-shadow);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // React Components
+        const { useState, useEffect, useRef } = React;
+
+        // Toast Component
+        const Toast = ({ toast, onClose }) => {
+            const { type, title, message } = toast;
+            const iconClass = {
+                success: 'fas fa-check-circle',
+                danger: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+            }[type];
+
+            return (
+                <div className={`toast toast-${type}`}>
+                    <div className="toast-icon">
+                        <i className={iconClass}></i>
+                    </div>
+                    <div className="toast-content">
+                        <div className="toast-title">{title}</div>
+                        <div className="toast-message">{message}</div>
+                    </div>
+                    <button className="toast-close" onClick={onClose}>
+                        <i className="fas fa-times"></i>
+                    </button>
+                </div>
+            );
+        };
+
+        // ToastContainer Component
+        const ToastContainer = ({ toasts, removeToast }) => {
+            return (
+                <div className="toast-container">
+                    {toasts.map((toast) => (
+                        <Toast key={toast.id} toast={toast} onClose={() => removeToast(toast.id)} />
+                    ))}
+                </div>
+            );
+        };
+
+        // Pagination Component
+        const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            const pages = [];
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+            }
+
+            return (
+                <div className="pagination">
+                    <div 
+                        className={`pagination-item ${currentPage === 1 ? 'disabled' : ''}`}
+                        onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
+                    >
+                        <i className="fas fa-chevron-left"></i>
+                    </div>
+                    
+                    {pages.map(page => (
+                        <div 
+                            key={page}
+                            className={`pagination-item ${currentPage === page ? 'active' : ''}`}
+                            onClick={() => onPageChange(page)}
+                        >
+                            {page}
+                        </div>
+                    ))}
+                    
+                    <div 
+                        className={`pagination-item ${currentPage === totalPages ? 'disabled' : ''}`}
+                        onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
+                    >
+                        <i className="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            );
+        };
+
+        // Modal Component
+        const Modal = ({ show, onClose, title, children, footer }) => {
+            if (!show) return null;
+
+            return (
+                <div className="modal-backdrop" onClick={onClose}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">{title}</h3>
+                            <button className="modal-close" onClick={onClose}>
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div className="modal-body">{children}</div>
+                        {footer && <div className="modal-footer">{footer}</div>}
+                    </div>
+                </div>
+            );
+        };
+
+        // Alert Component
+        const Alert = ({ type, message }) => {
+            if (!message) return null;
+
+            const iconClass = {
+                success: 'fas fa-check-circle',
+                danger: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+            }[type];
+
+            return (
+                <div className={`alert alert-${type}`}>
+                    <i className={iconClass}></i>
+                    <span>{message}</span>
+                </div>
+            );
+        };
+
+        // Department Management Component
+        const DepartmentsTab = ({ showToast }) => {
+            // Sample data - in a real app, this would come from an API
+            const [departments, setDepartments] = useState([
+                { id: 1, name: 'Computer Science', description: 'Study of computers and computational systems' },
+                { id: 2, name: 'Mathematics', description: 'Study of numbers, quantities, and shapes' },
+                { id: 3, name: 'Business Administration', description: 'Study of business management and operations' },
+                { id: 4, name: 'Engineering', description: 'Application of scientific knowledge to design' },
+                { id: 5, name: 'Arts and Humanities', description: 'Study of culture, literature, and philosophy' }
+            ]);
+
+            const [showModal, setShowModal] = useState(false);
+            const [modalType, setModalType] = useState('add');
+            const [formData, setFormData] = useState({ name: '', description: '' });
+            const [formErrors, setFormErrors] = useState({});
+            const [confirmDelete, setConfirmDelete] = useState(null);
+            const [errorMessage, setErrorMessage] = useState('');
+
+            // Sample courses data to check associations
+            const courses = [
+                { id: 1, code: 'CS101', title: 'Introduction to Programming', departmentId: 1 },
+                { id: 2, code: 'MATH201', title: 'Calculus I', departmentId: 2 },
+                { id: 3, code: 'BUS301', title: 'Marketing Principles', departmentId: 3 },
+            ];
+
+            const validateForm = () => {
+                const errors = {};
+                if (!formData.name.trim()) {
+                    errors.name = 'Department name is required';
+                }
+                
+                // Check for duplicate name
+                if (departments.some(d => d.name.toLowerCase() === formData.name.toLowerCase() && 
+                    (modalType === 'add' || (modalType === 'edit' && d.id !== formData.id)))) {
+                    errors.name = 'Department name already exists';
+                }
+                
+                setFormErrors(errors);
+                return Object.keys(errors).length === 0;
+            };
+
+            const handleInputChange = (e) => {
+                const { name, value } = e.target;
+                setFormData({ ...formData, [name]: value });
+                // Clear error when user types
+                if (formErrors[name]) {
+                    setFormErrors({ ...formErrors, [name]: '' });
+                }
+            };
+
+            const handleAddDepartment = () => {
+                setModalType('add');
+                setFormData({ name: '', description: '' });
+                setFormErrors({});
+                setErrorMessage('');
+                setShowModal(true);
+            };
+
+            const handleEditDepartment = (department) => {
+                setModalType('edit');
+                setFormData({ ...department });
+                setFormErrors({});
+                setErrorMessage('');
+                setShowModal(true);
+            };
+
+            const handleDeleteDepartment = (department) => {
+                setConfirmDelete(department);
+            };
+
+            const submitForm = () => {
+                if (!validateForm()) return;
+                
+                try {
+                    if (modalType === 'add') {
+                        const newDepartment = {
+                            ...formData,
+                            id: Math.max(0, ...departments.map(d => d.id)) + 1
+                        };
+                        setDepartments([...departments, newDepartment]);
+                        showToast('success', 'Success', 'Department added successfully');
+                    } else {
+                        setDepartments(departments.map(d => d.id === formData.id ? formData : d));
+                        showToast('success', 'Success', 'Department updated successfully');
+                    }
+                    setShowModal(false);
+                } catch (error) {
+                    setErrorMessage('An error occurred while saving the department');
+                }
+            };
+
+            const confirmDeleteDepartment = () => {
+                if (!confirmDelete) return;
+                
+                // Check if department has associated courses
+                const hasCourses = courses.some(course => course.departmentId === confirmDelete.id);
+                
+                if (hasCourses) {
+                    showToast('warning', 'Cannot Delete', 'Cannot delete. Reassign or remove associated courses first.');
+                } else {
+                    setDepartments(departments.filter(d => d.id !== confirmDelete.id));
+                    showToast('success', 'Deleted', 'Department deleted successfully');
+                }
+                setConfirmDelete(null);
+            };
+
+            return (
+                <div>
+                    <div className="card">
+                        <div className="card-header">
+                            <h2 className="card-title">Departments</h2>
+                            <button className="btn btn-primary" onClick={handleAddDepartment}>
+                                <i className="fas fa-plus"></i> Add Department
+                            </button>
+                        </div>
+                        <div className="card-body">
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {departments.map((department) => (
+                                            <tr key={department.id}>
+                                                <td>{department.id}</td>
+                                                <td>{department.name}</td>
+                                                <td>{department.description || '-'}</td>
+                                                <td>
+                                                    <div className="table-actions">
+                                                        <button 
+                                                            className="btn btn-sm btn-edit btn-icon" 
+                                                            onClick={() => handleEditDepartment(department)}
+                                                        >
+                                                            <i className="fas fa-edit"></i>
+                                                        </button>
+                                                        <button 
+                                                            className="btn btn-sm btn-delete btn-icon"
+                                                            onClick={() => handleDeleteDepartment(department)}
+                                                        >
+                                                            <i className="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Add/Edit Department Modal */}
+                    <Modal
+                        show={showModal}
+                        onClose={() => setShowModal(false)}
+                        title={modalType === 'add' ? 'Add Department' : 'Edit Department'}
+                        footer={
+                            <>
+                                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                                    Cancel
+                                </button>
+                                <button className="btn btn-primary" onClick={submitForm}>
+                                    {modalType === 'add' ? 'Add' : 'Save'} Department
+                                </button>
+                            </>
+                        }
+                    >
+                        {errorMessage && <Alert type="danger" message={errorMessage} />}
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="name">Department Name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                className={`form-control ${formErrors.name ? 'is-invalid' : ''}`}
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                placeholder="Enter department name"
+                            />
+                            {formErrors.name && <div className="invalid-feedback">{formErrors.name}</div>}
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="description">Description</label>
+                            <textarea
+                                id="description"
+                                name="description"
+                                className="form-control"
+                                value={formData.description}
+                                onChange={handleInputChange}
+                                placeholder="Enter department description (optional)"
+                                rows="3"
+                            ></textarea>
+                        </div>
+                    </Modal>
+
+                    {/* Delete Confirmation Modal */}
+                    <Modal
+                        show={confirmDelete !== null}
+                        onClose={() => setConfirmDelete(null)}
+                        title="Confirm Delete"
+                        footer={
+                            <>
+                                <button className="btn btn-secondary" onClick={() => setConfirmDelete(null)}>
+                                    Cancel
+                                </button>
+                                <button className="btn btn-danger" onClick={confirmDeleteDepartment}>
+                                    Delete
+                                </button>
+                            </>
+                        }
+                    >
+                        <p>Are you sure you want to delete the department <strong>{confirmDelete?.name}</strong>?</p>
+                        <p>This action cannot be undone.</p>
+                    </Modal>
+                </div>
+            );
+        };
+
+        // Courses Management Component
+        const CoursesTab = ({ showToast }) => {
+            // Sample data
+            const [departments, setDepartments] = useState([
+                { id: 1, name: 'Computer Science' },
+                { id: 2, name: 'Mathematics' },
+                { id: 3, name: 'Business Administration' },
+                { id: 4, name: 'Engineering' },
+                { id: 5, name: 'Arts and Humanities' }
+            ]);
+
+            const [semesters, setSemesters] = useState([
+                'Spring 2025',
+                'Fall 2024',
+                'Summer 2024',
+                'Spring 2024'
+            ]);
+
+            const [courses, setCourses] = useState([
+                { id: 1, code: 'CS101', title: 'Introduction to Programming', departmentId: 1, semester: 'Spring 2025' },
+                { id: 2, code: 'MATH201', title: 'Calculus I', departmentId: 2, semester: 'Spring 2025' },
+                { id: 3, code: 'BUS301', title: 'Marketing Principles', departmentId: 3, semester: 'Fall 2024' },
+                { id: 4, code: 'ENG101', title: 'Engineering Fundamentals', departmentId: 4, semester: 'Fall 2024' },
+                { id: 5, code: 'ART202', title: 'Art History', departmentId: 5, semester: 'Summer 2024' },
+                { id: 6, code: 'CS202', title: 'Data Structures', departmentId: 1, semester: 'Fall 2024' },
+                { id: 7, code: 'MATH301', title: 'Differential Equations', departmentId: 2, semester: 'Spring 2024' }
+            ]);
+
+            const [showModal, setShowModal] = useState(false);
+            const [modalType, setModalType] = useState('add');
+            const [formData, setFormData] = useState({ code: '', title: '', departmentId: '', semester: '' });
+            const [formErrors, setFormErrors] = useState({});
+            const [errorMessage, setErrorMessage] = useState('');
+            const [search, setSearch] = useState('');
+            const [filters, setFilters] = useState({ department: '', semester: '' });
+            const [currentPage, setCurrentPage] = useState(1);
+            const itemsPerPage = 5;
+
+            const handleInputChange = (e) => {
+                const { name, value } = e.target;
+                setFormData({ ...formData, [name]: value });
+                // Clear error when user types
+                if (formErrors[name]) {
+                    setFormErrors({ ...formErrors, [name]: '' });
+                }
+            };
+
+            const validateForm = () => {
+                const errors = {};
+                if (!formData.code.trim()) errors.code = 'Course code is required';
+                if (!formData.title.trim()) errors.title = 'Course title is required';
+                if (!formData.departmentId) errors.departmentId = 'Department is required';
+                if (!formData.semester) errors.semester = 'Semester is required';
+                
+                // Check for duplicate code
+                if (courses.some(c => 
+                    c.code.toLowerCase() === formData.code.toLowerCase() && 
+                    (modalType === 'add' || (modalType === 'edit' && c.id !== formData.id))
+                )) {
+                    errors.code = 'Course code already exists';
+                }
+                
+                setFormErrors(errors);
+                return Object.keys(errors).length === 0;
+            };
+
+            const handleAddCourse = () => {
+                setModalType('add');
+                setFormData({ code: '', title: '', departmentId: '', semester: '' });
+                setFormErrors({});
+                setErrorMessage('');
+                setShowModal(true);
+            };
+
+            const handleEditCourse = (course) => {
+                setModalType('edit');
+                setFormData({ ...course, departmentId: course.departmentId.toString() });
+                setFormErrors({});
+                setErrorMessage('');
+                setShowModal(true);
+            };
+
+            const submitForm = () => {
+                if (!validateForm()) return;
+                
+                try {
+                    if (modalType === 'add') {
+                        const newCourse = {
+                            ...formData,
+                            id: Math.max(0, ...courses.map(c => c.id)) + 1,
+                            departmentId: parseInt(formData.departmentId, 10)
+                        };
+                        setCourses([...courses, newCourse]);
+                        showToast('success', 'Success', 'Course added successfully');
+                    } else {
+                        setCourses(courses.map(c => c.id === formData.id ? {
+                            ...formData,
+                            departmentId: parseInt(formData.departmentId, 10)
+                        } : c));
+                        showToast('success', 'Success', 'Course updated successfully');
+                    }
+                    setShowModal(false);
+                } catch (error) {
+                    setErrorMessage('An error occurred while saving the course');
+                }
+            };
+
+            const handleSearchChange = (e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+            };
+
+            const handleFilterChange = (e) => {
+                const { name, value } = e.target;
+                setFilters({ ...filters, [name]: value });
+                setCurrentPage(1);
+            };
+
+            // Filter and search courses
+            const filteredCourses = courses.filter(course => {
+                const matchesDepartment = !filters.department || course.departmentId.toString() === filters.department;
+                const matchesSemester = !filters.semester || course.semester === filters.semester;
+                const matchesSearch = !search || 
+                    course.code.toLowerCase().includes(search.toLowerCase()) || 
+                    course.title.toLowerCase().includes(search.toLowerCase());
+                
+                return matchesDepartment && matchesSemester && matchesSearch;
+            });
+
+            // Pagination logic
+            const indexOfLastCourse = currentPage * itemsPerPage;
+            const indexOfFirstCourse = indexOfLastCourse - itemsPerPage;
+            const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
+
+            const getDepartmentName = (id) => {
+                const department = departments.find(d => d.id === id);
+                return department ? department.name : 'Unknown';
+            };
+
+            return (
+                <div>
+                    <div className="card">
+                        <div className="card-header">
+                            <h2 className="card-title">Courses</h2>
+                            <button className="btn btn-primary" onClick={handleAddCourse}>
+                                <i className="fas fa-plus"></i> Add Course
+                            </button>
+                        </div>
+                        <div className="card-body">
+                            <div className="search-bar">
+                                <input
+                                    type="text"
+                                    className="search-input"
+                                    placeholder="Search by course code or title..."
+                                    value={search}
+                                    onChange={handleSearchChange}
+                                />
+                            </div>
+                            
+                            <div className="filter-container">
+                                <select
+                                    className="filter-select"
+                                    name="department"
+                                    value={filters.department}
+                                    onChange={handleFilterChange}
+                                >
+                                    <option value="">All Departments</option>
+                                    {departments.map(department => (
+                                        <option key={department.id} value={department.id.toString()}>
+                                            {department.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                
+                                <select
+                                    className="filter-select"
+                                    name="semester"
+                                    value={filters.semester}
+                                    onChange={handleFilterChange}
+                                >
+                                    <option value="">All Semesters</option>
+                                    {semesters.map(semester => (
+                                        <option key={semester} value={semester}>
+                                            {semester}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Title</th>
+                                            <th>Department</th>
+                                            <th>Semester</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentCourses.length > 0 ? (
+                                            currentCourses.map((course) => (
+                                                <tr key={course.id}>
+                                                    <td>{course.code}</td>
+                                                    <td>{course.title}</td>
+                                                    <td>{getDepartmentName(course.departmentId)}</td>
+                                                    <td>
+                                                        <span className="badge badge-primary">
+                                                            {course.semester}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div className="table-actions">
+                                                            <button 
+                                                                className="btn btn-sm btn-edit btn-icon" 
+                                                                onClick={() => handleEditCourse(course)}
+                                                            >
+                                                                <i className="fas fa-edit"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>
+                                                    No courses found matching the criteria.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            {filteredCourses.length > itemsPerPage && (
+                                <Pagination
+                                    totalItems={filteredCourses.length}
+                                    itemsPerPage={itemsPerPage}
+                                    currentPage={currentPage}
+                                    onPageChange={setCurrentPage}
+                                />
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Add/Edit Course Modal */}
+                    <Modal
+                        show={showModal}
+                        onClose={() => setShowModal(false)}
+                        title={modalType === 'add' ? 'Add Course' : 'Edit Course'}
+                        footer={
+                            <>
+                                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                                    Cancel
+                                </button>
+                                <button className="btn btn-primary" onClick={submitForm}>
+                                    {modalType === 'add' ? 'Add' : 'Save'} Course
+                                </button>
+                            </>
+                        }
+                    >
+                        {errorMessage && <Alert type="danger" message={errorMessage} />}
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="code">Course Code</label>
+                            <input
+                                type="text"
+                                id="code"
+                                name="code"
+                                className={`form-control ${formErrors.code ? 'is-invalid' : ''}`}
+                                value={formData.code}
+                                onChange={handleInputChange}
+                                placeholder="e.g., CS101"
+                            />
+                            {formErrors.code && <div className="invalid-feedback">{formErrors.code}</div>}
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="title">Course Title</label>
+                            <input
+                                type="text"
+                                id="title"
+                                name="title"
+                                className={`form-control ${formErrors.title ? 'is-invalid' : ''}`}
+                                value={formData.title}
+                                onChange={handleInputChange}
+                                placeholder="Enter course title"
+                            />
+                            {formErrors.title && <div className="invalid-feedback">{formErrors.title}</div>}
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="departmentId">Department</label>
+                            <select
+                                id="departmentId"
+                                name="departmentId"
+                                className={`form-control ${formErrors.departmentId ? 'is-invalid' : ''}`}
+                                value={formData.departmentId}
+                                onChange={handleInputChange}
+                            >
+                                <option value="">Select Department</option>
+                                {departments.map(department => (
+                                    <option key={department.id} value={department.id.toString()}>
+                                        {department.name}
+                                    </option>
+                                ))}
+                            </select>
+                            {formErrors.departmentId && <div className="invalid-feedback">{formErrors.departmentId}</div>}
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="semester">Semester</label>
+                            <select
+                                id="semester"
+                                name="semester"
+                                className={`form-control ${formErrors.semester ? 'is-invalid' : ''}`}
+                                value={formData.semester}
+                                onChange={handleInputChange}
+                            >
+                                <option value="">Select Semester</option>
+                                {semesters.map(semester => (
+                                    <option key={semester} value={semester}>
+                                        {semester}
+                                    </option>
+                                ))}
+                            </select>
+                            {formErrors.semester && <div className="invalid-feedback">{formErrors.semester}</div>}
+                        </div>
+                    </Modal>
+                </div>
+            );
+        };
+
+        // Course Materials Upload Component
+        const MaterialsTab = ({ showToast }) => {
+            // Sample data
+            const [courses, setCourses] = useState([
+                { id: 1, code: 'CS101', title: 'Introduction to Programming', departmentId: 1, semester: 'Spring 2025' },
+                { id: 2, code: 'MATH201', title: 'Calculus I', departmentId: 2, semester: 'Spring 2025' },
+                { id: 3, code: 'BUS301', title: 'Marketing Principles', departmentId: 3, semester: 'Fall 2024' },
+                { id: 4, code: 'ENG101', title: 'Engineering Fundamentals', departmentId: 4, semester: 'Fall 2024' },
+                { id: 5, code: 'ART202', title: 'Art History', departmentId: 5, semester: 'Summer 2024' },
+            ]);
+
+            const materialTypes = [
+                'Lecture Notes',
+                'Assignment',
+                'Exam',
+                'Reference Material',
+                'Syllabus',
+                'Tutorial'
+            ];
+
+            const [materials, setMaterials] = useState([
+                { 
+                    id: 1, 
+                    courseId: 1, 
+                    title: 'Introduction to Java', 
+                    description: 'Basic Java syntax and concepts', 
+                    type: 'Lecture Notes', 
+                    fileName: 'intro_to_java.pdf',
+                    fileSize: '2.4 MB',
+                    fileType: 'application/pdf',
+                    uploadDate: '2025-04-28',
+                    tags: ['java', 'programming', 'lecture']
+                },
+                { 
+                    id: 2, 
+                    courseId: 1, 
+                    title: 'First Assignment', 
+                    description: 'Basic programming exercises', 
+                    type: 'Assignment', 
+                    fileName: 'assignment1.pdf',
+                    fileSize: '1.2 MB',
+                    fileType: 'application/pdf',
+                    uploadDate: '2025-04-29',
+                    tags: ['assignment', 'java']
+                },
+                { 
+                    id: 3, 
+                    courseId: 2, 
+                    title: 'Limits and Continuity', 
+                    description: 'Lecture notes on limits and continuity', 
+                    type: 'Lecture Notes', 
+                    fileName: 'limits.pdf',
+                    fileSize: '3.5 MB',
+                    fileType: 'application/pdf',
+                    uploadDate: '2025-04-27',
+                    tags: ['calculus', 'limits']
+                }
+            ]);
+
+            const [showUploadModal, setShowUploadModal] = useState(false);
+            const [uploadData, setUploadData] = useState({
+                courseId: '',
+                title: '',
+                description: '',
+                type: '',
+                tags: '',
+                file: null
+            });
+            const [uploadErrors, setUploadErrors] = useState({});
+            const [searchTerm, setSearchTerm] = useState('');
+            const [courseFilter, setCourseFilter] = useState('');
+            const [typeFilter, setTypeFilter] = useState('');
+            const fileInputRef = useRef(null);
+
+            const validateUploadForm = () => {
+                const errors = {};
+                if (!uploadData.courseId) errors.courseId = 'Please select a course';
+                if (!uploadData.title.trim()) errors.title = 'Title is required';
+                if (!uploadData.type) errors.type = 'Please select material type';
+                if (!uploadData.file) errors.file = 'Please select a file to upload';
+                else if (!['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(uploadData.file.type)) {
+                    errors.file = 'Only PDF or DOC files are allowed';
+                }
+                
+                setUploadErrors(errors);
+                return Object.keys(errors).length === 0;
+            };
+
+            const handleUploadInputChange = (e) => {
+                const { name, value } = e.target;
+                setUploadData({ ...uploadData, [name]: value });
+                // Clear error when user types
+                if (uploadErrors[name]) {
+                    setUploadErrors({ ...uploadErrors, [name]: '' });
+                }
+            };
+
+            const handleFileChange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    if (['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(file.type)) {
+                        setUploadData({ ...uploadData, file });
+                        if (uploadErrors.file) {
+                            setUploadErrors({ ...uploadErrors, file: '' });
+                        }
+                    } else {
+                        setUploadErrors({ ...uploadErrors, file: 'Only PDF or DOC files are allowed' });
+                    }
+                }
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            };
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    const file = e.dataTransfer.files[0];
+                    if (['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(file.type)) {
+                        setUploadData({ ...uploadData, file });
+                        if (uploadErrors.file) {
+                            setUploadErrors({ ...uploadErrors, file: '' });
+                        }
+                    } else {
+                        setUploadErrors({ ...uploadErrors, file: 'Only PDF or DOC files are allowed' });
+                    }
+                }
+            };
+
+            const clearFileSelection = () => {
+                setUploadData({ ...uploadData, file: null });
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
+            };
+
+            const handleUploadSubmit = (e) => {
+                e.preventDefault();
+                
+                if (!validateUploadForm()) return;
+                
+                try {
+                    // Simulate file upload
+                    const newMaterial = {
+                        id: Math.max(0, ...materials.map(m => m.id)) + 1,
+                        courseId: parseInt(uploadData.courseId),
+                        title: uploadData.title,
+                        description: uploadData.description,
+                        type: uploadData.type,
+                        fileName: uploadData.file.name,
+                        fileSize: formatFileSize(uploadData.file.size),
+                        fileType: uploadData.file.type,
+                        uploadDate: new Date().toISOString().split('T')[0],
+                        tags: uploadData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+                    };
+                    
+                    setMaterials([newMaterial, ...materials]);
+                    setShowUploadModal(false);
+                    clearForm();
+                    showToast('success', 'Upload Successful', 'Course material has been uploaded successfully');
+                } catch (error) {
+                    showToast('danger', 'Upload Failed', 'An error occurred during upload');
+                }
+            };
+
+            const clearForm = () => {
+                setUploadData({
+                    courseId: '',
+                    title: '',
+                    description: '',
+                    type: '',
+                    tags: '',
+                    file: null
+                });
+                setUploadErrors({});
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
+            };
+
+            const handleNewUpload = () => {
+                clearForm();
+                setShowUploadModal(true);
+            };
+
+            const formatFileSize = (bytes) => {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            };
+
+            const getFileIconClass = (fileType) => {
+                if (fileType.includes('pdf')) return 'far fa-file-pdf';
+                if (fileType.includes('word') || fileType.includes('msword')) return 'far fa-file-word';
+                return 'far fa-file';
+            };
+
+            const getCourseNameById = (id) => {
+                const course = courses.find(c => c.id === id);
+                return course ? `${course.code}: ${course.title}` : 'Unknown Course';
+            };
+
+            // Filter materials based on search term and filters
+            const filteredMaterials = materials.filter(material => {
+                const matchesSearch = !searchTerm || 
+                    material.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    material.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    material.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+                
+                const matchesCourse = !courseFilter || material.courseId.toString() === courseFilter;
+                const matchesType = !typeFilter || material.type === typeFilter;
+                
+                return matchesSearch && matchesCourse && matchesType;
+            });
+
+            return (
+                <div>
+                    <div className="card">
+                        <div className="card-header">
+                            <h2 className="card-title">Course Materials</h2>
+                            <button className="btn btn-primary" onClick={handleNewUpload}>
+                                <i className="fas fa-upload"></i> Upload New Material
+                            </button>
+                        </div>
+                        <div className="card-body">
+                            <div className="search-bar">
+                                <input
+                                    type="text"
+                                    className="search-input"
+                                    placeholder="Search materials..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            
+                            <div className="filter-container">
+                                <select
+                                    className="filter-select"
+                                    value={courseFilter}
+                                    onChange={(e) => setCourseFilter(e.target.value)}
+                                >
+                                    <option value="">All Courses</option>
+                                    {courses.map(course => (
+                                        <option key={course.id} value={course.id.toString()}>
+                                            {course.code}: {course.title}
+                                        </option>
+                                    ))}
+                                </select>
+                                
+                                <select
+                                    className="filter-select"
+                                    value={typeFilter}
+                                    onChange={(e) => setTypeFilter(e.target.value)}
+                                >
+                                    <option value="">All Types</option>
+                                    {materialTypes.map(type => (
+                                        <option key={type} value={type}>
+                                            {type}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Course</th>
+                                            <th>Type</th>
+                                            <th>File</th>
+                                            <th>Upload Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredMaterials.length > 0 ? (
+                                            filteredMaterials.map((material) => (
+                                                <tr key={material.id}>
+                                                    <td>
+                                                        <div>{material.title}</div>
+                                                        <small style={{ color: 'var(--gray)' }}>{material.description}</small>
+                                                        <div>
+                                                            {material.tags.map((tag, index) => (
+                                                                <span 
+                                                                    key={index} 
+                                                                    className="badge badge-secondary"
+                                                                    style={{ marginRight: '5px', marginTop: '5px' }}
+                                                                >
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </td>
+                                                    <td>{getCourseNameById(material.courseId)}</td>
+                                                    <td>
+                                                        <span className="badge badge-primary">
+                                                            {material.type}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                            <i className={getFileIconClass(material.fileType)} style={{ fontSize: '1.2rem', color: 'var(--primary)' }}></i>
+                                                            <div>
+                                                                <div style={{ fontWeight: '500' }}>{material.fileName}</div>
+                                                                <small style={{ color: 'var(--gray)' }}>{material.fileSize}</small>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>{material.uploadDate}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>
+                                                    No materials found matching the criteria.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Upload Material Modal */}
+                    <Modal
+                        show={showUploadModal}
+                        onClose={() => setShowUploadModal(false)}
+                        title="Upload Course Material"
+                        footer={
+                            <>
+                                <button className="btn btn-secondary" onClick={() => setShowUploadModal(false)}>
+                                    Cancel
+                                </button>
+                                <button className="btn btn-primary" onClick={handleUploadSubmit}>
+                                    Upload Material
+                                </button>
+                            </>
+                        }
+                    >
+                        <form onSubmit={handleUploadSubmit}>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="courseId">Course</label>
+                                <select
+                                    id="courseId"
+                                    name="courseId"
+                                    className={`form-control ${uploadErrors.courseId ? 'is-invalid' : ''}`}
+                                    value={uploadData.courseId}
+                                    onChange={handleUploadInputChange}
+                                >
+                                    <option value="">Select Course</option>
+                                    {courses.map(course => (
+                                        <option key={course.id} value={course.id.toString()}>
+                                            {course.code}: {course.title}
+                                        </option>
+                                    ))}
+                                </select>
+                                {uploadErrors.courseId && <div className="invalid-feedback">{uploadErrors.courseId}</div>}
+                            </div>
+                            
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="title">Title</label>
+                                <input
+                                    type="text"
+                                    id="title"
+                                    name="title"
+                                    className={`form-control ${uploadErrors.title ? 'is-invalid' : ''}`}
+                                    value={uploadData.title}
+                                    onChange={handleUploadInputChange}
+                                    placeholder="Enter material title"
+                                />
+                                {uploadErrors.title && <div className="invalid-feedback">{uploadErrors.title}</div>}
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="type">Material Type</label>
+                                <select
+                                    id="type"
+                                    name="type"
+                                    className={`form-control ${uploadErrors.type ? 'is-invalid' : ''}`}
+                                    value={uploadData.type}
+                                    onChange={handleUploadInputChange}
+                                >
+                                    <option value="">Select Material Type</option>
+                                    {materialTypes.map(type => (
+                                        <option key={type} value={type}>{type}</option>
+                                    ))}
+                                </select>
+                                {uploadErrors.type && <div className="invalid-feedback">{uploadErrors.type}</div>}
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="description">Description (Optional)</label>
+                                <textarea
+                                    id="description"
+                                    name="description"
+                                    className="form-control"
+                                    value={uploadData.description}
+                                    onChange={handleUploadInputChange}
+                                    placeholder="Enter a brief description"
+                                    rows="3"
+                                ></textarea>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="tags">Tags (Optional, comma separated)</label>
+                                <input
+                                    type="text"
+                                    id="tags"
+                                    name="tags"
+                                    className="form-control"
+                                    value={uploadData.tags}
+                                    onChange={handleUploadInputChange}
+                                    placeholder="e.g., lecture, midterm, java"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">File (PDF or DOC only)</label>
+                                <div 
+                                    className={`file-upload ${uploadErrors.file ? 'is-invalid' : ''}`}
+                                    onDragOver={handleDragOver}
+                                    onDrop={handleDrop}
+                                    onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                                >
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        className="file-upload-input"
+                                        accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                        onChange={handleFileChange}
+                                    />
+                                    
+                                    {uploadData.file ? (
+                                        <div className="file-list">
+                                            <div className="file-list-item">
+                                                <div className="file-list-icon">
+                                                    <i className={getFileIconClass(uploadData.file.type)}></i>
+                                                </div>
+                                                <div className="file-list-info">
+                                                    <div className="file-list-name">{uploadData.file.name}</div>
+                                                    <div className="file-list-size">{formatFileSize(uploadData.file.size)}</div>
+                                                </div>
+                                                <button 
+                                                    type="button" 
+                                                    className="file-list-remove"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        clearFileSelection();
+                                                    }}
+                                                >
+                                                    <i className="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="file-upload-icon">
+                                                <i className="fas fa-file-upload"></i>
+                                            </div>
+                                            <div className="file-upload-text">
+                                                <strong>Click to upload</strong> or drag and drop
+                                            </div>
+                                            <div className="file-upload-text">
+                                                PDF or DOC files only
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                                {uploadErrors.file && <div className="invalid-feedback">{uploadErrors.file}</div>}
+                            </div>
+                        </form>
+                    </Modal>
+                </div>
+            );
+        };
+
+        // Dashboard Layout
+        const Dashboard = () => {
+            const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+            const [activeTab, setActiveTab] = useState('departments');
+            const [showUserDropdown, setShowUserDropdown] = useState(false);
+            const [toasts, setToasts] = useState([]);
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const nextToastId = useRef(1);
+
+            const toggleSidebar = () => {
+                setSidebarCollapsed(!sidebarCollapsed);
+            };
+
+            const toggleUserDropdown = () => {
+                setShowUserDropdown(!showUserDropdown);
+            };
+
+            const showToast = (type, title, message) => {
+                const newToast = {
+                    id: nextToastId.current++,
+                    type,
+                    title,
+                    message
+                };
+                
+                setToasts(prev => [...prev, newToast]);
+                
+                // Auto remove toast after 3 seconds
+                setTimeout(() => {
+                    removeToast(newToast.id);
+                }, 3000);
+            };
+
+            const removeToast = (id) => {
+                setToasts(prev => prev.filter(toast => toast.id !== id));
+            };
+
+            // Close dropdowns when clicking outside
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (showUserDropdown) {
+                        setShowUserDropdown(false);
+                    }
+                };
+                
+                document.addEventListener('click', handleClickOutside);
+                return () => {
+                    document.removeEventListener('click', handleClickOutside);
+                };
+            }, [showUserDropdown]);
+
+            const toggleMobileMenu = () => {
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+            };
+
+            return (
+                <div className="dashboard-container">
+                    {/* Sidebar */}
+                    <div className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''} ${isMobileMenuOpen ? 'show' : ''}`}>
+                        <div className="sidebar-header">
+                            <div className="sidebar-logo">
+                                <i className="fas fa-university"></i>
+                                <span>UniAdmin</span>
+                            </div>
+                        </div>
+                        
+                        <button className="sidebar-toggle" onClick={toggleSidebar}>
+                            <i className={`fas fa-chevron-${sidebarCollapsed ? 'right' : 'left'}`}></i>
+                        </button>
+                        
+                        <ul className="nav-menu">
+                            <li className="nav-item">
+                                <a 
+                                    className={`nav-link ${activeTab === 'departments' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setActiveTab('departments');
+                                        setIsMobileMenuOpen(false);
+                                    }}
+                                    href="#!"
+                                >
+                                    <i className="nav-icon fas fa-building"></i>
+                                    <span className="nav-text">Departments</span>
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a 
+                                    className={`nav-link ${activeTab === 'courses' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setActiveTab('courses');
+                                        setIsMobileMenuOpen(false);
+                                    }}
+                                    href="#!"
+                                >
+                                    <i className="nav-icon fas fa-book"></i>
+                                    <span className="nav-text">Courses</span>
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a 
+                                    className={`nav-link ${activeTab === 'materials' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setActiveTab('materials');
+                                        setIsMobileMenuOpen(false);
+                                    }}
+                                    href="#!"
+                                >
+                                    <i className="nav-icon fas fa-file-alt"></i>
+                                    <span className="nav-text">Materials</span>
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a 
+                                    className="nav-link"
+                                    href="#!"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    <i className="nav-icon fas fa-cog"></i>
+                                    <span className="nav-text">Settings</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className={`main-content ${sidebarCollapsed ? 'expanded' : ''}`}>
+                        <div className="topbar">
+                            <h1 className="topbar-title">
+                                {
+                                    activeTab === 'departments' ? 'Department Management' :
+                                    activeTab === 'courses' ? 'Course Management' :
+                                    'Course Materials'
+                                }
+                            </h1>
+                            
+                            <div className="user-dropdown" onClick={(e) => e.stopPropagation()}>
+                                <button className="user-button" onClick={toggleUserDropdown}>
+                                    <div className="user-avatar">AK</div>
+                                    <div className="user-info">
+                                        <div className="user-name">Abredagn</div>
+                                        <div className="user-role">Administrator</div>
+                                    </div>
+                                    <i className={`fas fa-chevron-${showUserDropdown ? 'up' : 'down'}`} style={{ fontSize: '0.8rem' }}></i>
+                                </button>
+                                
+                                <div className={`dropdown-menu ${showUserDropdown ? 'show' : ''}`}>
+                                    <a href="#!" className="dropdown-item">
+                                        <i className="fas fa-user"></i>
+                                        Profile
+                                    </a>
+                                    <a href="#!" className="dropdown-item">
+                                        <i className="fas fa-cog"></i>
+                                        Settings
+                                    </a>
+                                    <div className="dropdown-divider"></div>
+                                    <a href="#!" className="dropdown-item">
+                                        <i className="fas fa-sign-out-alt"></i>
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Tab Content */}
+                        <div className="tab-content">
+                            {activeTab === 'departments' && <DepartmentsTab showToast={showToast} />}
+                            {activeTab === 'courses' && <CoursesTab showToast={showToast} />}
+                            {activeTab === 'materials' && <MaterialsTab showToast={showToast} />}
+                        </div>
+                    </div>
+                    
+                    {/* Toast Notifications */}
+                    <ToastContainer toasts={toasts} removeToast={removeToast} />
+                    
+                    {/* Mobile Menu Toggle */}
+                    <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+                        <i className={`fas fa-${isMobileMenuOpen ? 'times' : 'bars'}`}></i>
+                    </button>
+                </div>
+            );
+        };
+
+        // Login Component
+        const Login = ({ onLogin }) => {
+            const [formData, setFormData] = useState({ username: '', password: '' });
+            const [formErrors, setFormErrors] = useState({});
+            const [isLoading, setIsLoading] = useState(false);
+
+            const handleInputChange = (e) => {
+                const { name, value } = e.target;
+                setFormData({ ...formData, [name]: value });
+                // Clear error when user types
+                if (formErrors[name]) {
+                    setFormErrors({ ...formErrors, [name]: '' });
+                }
+            };
+
+            const validateForm = () => {
+                const errors = {};
+                if (!formData.username.trim()) errors.username = 'Username is required';
+                if (!formData.password) errors.password = 'Password is required';
+                
+                setFormErrors(errors);
+                return Object.keys(errors).length === 0;
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (!validateForm()) return;
+                
+                setIsLoading(true);
+                
+                // Simulate login API call
+                setTimeout(() => {
+                    setIsLoading(false);
+                    
+                    // For demo purposes, accept any login
+                    onLogin();
+                }, 1500);
+            };
+
+            return (
+                <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    alignItems: 'center', 
+                    minHeight: '100vh',
+                    background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
+                }}>
+                    <div style={{ 
+                        width: '100%', 
+                        maxWidth: '400px', 
+                        padding: '30px', 
+                        borderRadius: 'var(--border-radius)', 
+                        boxShadow: 'var(--box-shadow)',
+                        background: 'white'
+                    }}>
+                        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+                            <div style={{ fontSize: '2rem', color: 'var(--primary)', marginBottom: '10px' }}>
+                                <i className="fas fa-university"></i>
+                            </div>
+                            <h1 style={{ fontSize: '1.8rem', fontWeight: '600', marginBottom: '5px' }}>UniAdmin</h1>
+                            <p style={{ color: 'var(--gray)' }}>University Administration Dashboard</p>
+                        </div>
+                        
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="username">Username</label>
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    className={`form-control ${formErrors.username ? 'is-invalid' : ''}`}
+                                    value={formData.username}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter your username"
+                                />
+                                {formErrors.username && <div className="invalid-feedback">{formErrors.username}</div>}
+                            </div>
+                            
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="password">Password</label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    className={`form-control ${formErrors.password ? 'is-invalid' : ''}`}
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter your password"
+                                />
+                                {formErrors.password && <div className="invalid-feedback">{formErrors.password}</div>}
+                            </div>
+                            
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                <div>
+                                    <input type="checkbox" id="remember" style={{ marginRight: '5px' }} />
+                                    <label htmlFor="remember" style={{ fontSize: '0.9rem' }}>Remember me</label>
+                                </div>
+                                <a href="#!" style={{ fontSize: '0.9rem', color: 'var(--primary)', textDecoration: 'none' }}>
+                                    Forgot password?
+                                </a>
+                            </div>
+                            
+                            <button 
+                                type="submit" 
+                                className="btn btn-primary" 
+                                style={{ width: '100%' }}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? (
+                                    <span><i className="fas fa-spinner fa-spin"></i> Signing in...</span>
+                                ) : 'Sign In'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main App
+        const App = () => {
+            const [isAuthenticated, setIsAuthenticated] = useState(false);
+            
+            const handleLogin = () => {
+                setIsAuthenticated(true);
+            };
+            
+            return isAuthenticated ? <Dashboard /> : <Login onLogin={handleLogin} />;
+        };
+
+        // Render App
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
